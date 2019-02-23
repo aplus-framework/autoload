@@ -1,11 +1,13 @@
-# Image from https://hub.docker.com/_/php/
+---
 image: php:7.3
 
-cache:
+test:php7.3:
+  image: php:7.3
+  stage: test
+  cache:
     paths:
-        - vendor/
-
-before_script:
+      - vendor/
+  before_script:
     - apt-get update -yqq
     - apt-get install -yqq git libcurl4-gnutls-dev libxml2-dev libbz2-dev libzip-dev zlib1g-dev
     # Install PHP extensions
@@ -16,29 +18,26 @@ before_script:
     # Install and run Composer
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install
-
-test:php7.3:
-    image: php:7.3
-    stage: test
-    script:
-        - vendor/bin/phpunit --configuration phpunit.xml.dist --colors=never
-    artifacts:
-        paths:
-            - build/html/
-    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  script:
+    - vendor/bin/phpunit --configuration phpunit.xml.dist --colors=never
+  artifacts:
+    paths:
+      - build/html/
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
 
 pages:
-    stage: deploy
-    dependencies:
-        - test:php7.3
-    environment:
-        name: production
-        url: https://the-framework.gitlab.io
-    script:
-        - mkdir public/
-        - mv build/html/* public/
-    artifacts:
-        paths:
-            - public
-    only:
-        - master
+  stage: deploy
+  dependencies:
+    - test:php7.3
+  environment:
+    name: production
+    url: https://the-framework.gitlab.io
+  script:
+    - mkdir public/
+    - mv build/html/* public/
+    - curl -sS https://the-framework.gitlab.io/redirect.php | php
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
