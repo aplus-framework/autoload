@@ -1,12 +1,5 @@
 <?php namespace Framework\Autoload;
 
-if ( ! \defined('FRAMEWORK_DIR')) {
-	/**
-	 * Framework directory path.
-	 */
-	\define('FRAMEWORK_DIR', \realpath(__DIR__ . '/../..') . \DIRECTORY_SEPARATOR);
-}
-
 /**
  * Class Autoloader.
  */
@@ -17,11 +10,7 @@ class Autoloader
 	 *
 	 * @var array
 	 */
-	protected $classes = [
-		// Autoload
-		'Framework\Autoload\Autoloader' => \FRAMEWORK_DIR . 'autoload/src/Autoloader.php',
-		'Framework\Autoload\Locator' => \FRAMEWORK_DIR . 'autoload/src/Locator.php',
-	];
+	protected $classes = [];
 	/**
 	 * List of namespaces to directory paths.
 	 *
