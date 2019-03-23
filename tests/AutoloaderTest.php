@@ -29,32 +29,75 @@ class AutoloaderTest extends TestCase
 			'Tests' => $dir,
 			'Foo\Bar' => $dir,
 		], $this->autoloader->getNamespaces());
+		$this->autoloader->removeNamespaces(['Tests']);
+		$this->assertEquals([
+			'Foo\Bar' => $dir,
+		], $this->autoloader->getNamespaces());
 	}
 
 	public function testClasses()
 	{
-		$classes = $this->autoloader->getClasses();
-		$this->autoloader->setClass('\\' . __CLASS__, __FILE__);
+		$this->autoloader->setClasses([
+			'\\' . __CLASS__ => __FILE__,
+			'\Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
+		]);
 		$this->assertEquals(
-			\array_merge($classes, [__CLASS__ => __FILE__]),
+			[
+			__CLASS__ => __FILE__,
+			'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
+		],
 			$this->autoloader->getClasses()
 		);
-		$this->autoloader->setClasses([__CLASS__ => __FILE__]);
+		$this->autoloader->removeClasses([__CLASS__]);
 		$this->assertEquals(
-			\array_merge($classes, [__CLASS__ => __FILE__]),
+			[
+			'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
+		],
 			$this->autoloader->getClasses()
 		);
 	}
 
-	/*public function testRegister()
+	public function testFindClassPath()
 	{
+		$this->assertFalse($this->autoloader->findClassPath(__CLASS__));
+		$this->autoloader->setNamespace(__NAMESPACE__, __DIR__);
+		$this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+		$this->autoloader->setClass(__CLASS__, __FILE__);
+		$this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+	}
 
-	}*/
-	/*public function testLoadClass()
+	public function testLoadClass()
 	{
+		$this->assertFalse($this->autoloader->loadClass('Foo\NamespacedClass'));
+		$this->autoloader->setNamespace('Foo', __DIR__ . '/support');
+		$this->assertTrue($this->autoloader->loadClass('Foo\NamespacedClass'));
+	}
+
+	public function testPathIsNotFile()
+	{
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Path is not a file: foo');
+		$this->autoloader->setClass('Foo', 'foo');
+	}
+
+	public function testPathIsNotDirectory()
+	{
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Path is not a directory: foo');
+		$this->autoloader->setNamespace('Foo', 'foo');
+	}
+
+	public function testNewClass()
+	{
+		$this->autoloader->setNamespace('Foo\NamespacedClass', __DIR__ . '/support');
 		$this->assertInstanceOf(
-			\Framework\Database\Database::class,
-			new \Framework\Database\Database()
+			\Foo\NamespacedClass::class,
+			new \Foo\NamespacedClass()
 		);
-	}*/
+	}
+
+	public function testUnregister()
+	{
+		$this->assertTrue($this->autoloader->unregister());
+	}
 }

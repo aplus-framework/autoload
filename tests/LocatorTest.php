@@ -40,7 +40,7 @@ class LocatorTest extends TestCase
 		$this->assertEquals(__CLASS__, $this->locator->getClassName(__FILE__));
 		$this->assertFalse($this->locator->getClassName(__DIR__ . '/unknown'));
 		$this->assertEquals(
-			'Foo\\Bar',
+			'Foo\NamespacedClass',
 			$this->locator->getClassName(__DIR__ . '/support/NamespacedClass.php')
 		);
 		$this->assertFalse($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));

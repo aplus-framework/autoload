@@ -1,7 +1,7 @@
 <?php
 namespace Foo;
 
-class Bar
+class NamespacedClass
 {
 }
 
