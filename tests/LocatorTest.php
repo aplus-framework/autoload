@@ -18,7 +18,7 @@ class LocatorTest extends TestCase
 	public function setUp()
 	{
 		$this->autoloader = new Autoloader();
-		$this->locator    = new Locator($this->autoloader);
+		$this->locator = new Locator($this->autoloader);
 	}
 
 	public function testListFiles()
@@ -27,12 +27,10 @@ class LocatorTest extends TestCase
 		$this->assertEquals([
 			__DIR__ . '/AutoloaderTest.php',
 			__FILE__,
-			__DIR__ . '/bootstrap.php',
 		], $this->locator->listFiles(__DIR__));
 		$this->assertEquals([
 			__DIR__ . '/AutoloaderTest.php',
 			__FILE__,
-			__DIR__ . '/bootstrap.php',
 		], $this->locator->listFiles(__DIR__ . '/../tests'));
 	}
 
@@ -40,18 +38,15 @@ class LocatorTest extends TestCase
 	{
 		$this->assertEquals(__CLASS__, $this->locator->getClassName(__FILE__));
 		$this->assertFalse($this->locator->getClassName(__DIR__ . '/unknown'));
-		$this->assertFalse($this->locator->getClassName(__DIR__ . '/bootstrap.php'));
 	}
 
 	public function testGetFiles()
 	{
 		$this->autoloader->setNamespace('Autoload', __DIR__ . '/..');
-
 		$this->assertEquals(
 			[
 				__DIR__ . '/AutoloaderTest.php',
 				__FILE__,
-				__DIR__ . '/bootstrap.php',
 			],
 			$this->locator->getFiles('tests')
 		);
@@ -60,13 +55,6 @@ class LocatorTest extends TestCase
 	public function testFindFiles()
 	{
 		$this->autoloader->setNamespace('Tests', __DIR__);
-
-		$this->assertEquals(
-			[
-				__DIR__ . '/bootstrap.php',
-			],
-			$this->locator->findFiles('bootstrap')
-		);
 		$this->assertEquals(
 			[
 				__DIR__ . '/LocatorTest.php',
@@ -87,21 +75,16 @@ class LocatorTest extends TestCase
 	public function testNamespacedFilepath()
 	{
 		$this->autoloader->setNamespace('Tests\Foo', __DIR__);
-
 		$this->assertEquals(
 			__FILE__,
 			$this->locator->getNamespacedFilepath('Tests/Foo/LocatorTest')
 		);
-
 		$this->autoloader->setNamespace('Tests', __DIR__);
-
 		$this->assertEquals(
 			__FILE__,
 			$this->locator->getNamespacedFilepath('Tests/LocatorTest')
 		);
-
-		$this->assertEquals(
-			false,
+		$this->assertFalse(
 			$this->locator->getNamespacedFilepath('LocatorTest')
 		);
 	}

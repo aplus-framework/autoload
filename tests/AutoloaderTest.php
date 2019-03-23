@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class AutoloaderTest extends TestCase
 {
 	/**
-	 * @var \Framework\Autoload\Autoloader
+	 * @var Autoloader
 	 */
 	protected $autoloader;
 
@@ -18,18 +18,15 @@ class AutoloaderTest extends TestCase
 	public function testNamespaces()
 	{
 		$this->assertEmpty($this->autoloader->getNamespace());
-
 		$this->autoloader->setNamespace([
-			'Tests'     => __DIR__,
+			'Tests' => __DIR__,
 			'Foo\Bar\\' => __DIR__,
 		]);
-
 		$dir = __DIR__ . \DIRECTORY_SEPARATOR;
-
 		$this->assertEquals($dir, $this->autoloader->getNamespace('Tests'));
 		$this->assertFalse($this->autoloader->getNamespace('Testss'));
 		$this->assertEquals([
-			'Tests'   => $dir,
+			'Tests' => $dir,
 			'Foo\Bar' => $dir,
 		], $this->autoloader->getNamespace());
 	}
@@ -37,16 +34,12 @@ class AutoloaderTest extends TestCase
 	public function testClasses()
 	{
 		$classes = $this->autoloader->getClass();
-
 		$this->autoloader->setClass('\\' . __CLASS__, __FILE__);
-
 		$this->assertEquals(
 			\array_merge($classes, [__CLASS__ => __FILE__]),
 			$this->autoloader->getClass()
 		);
-
 		$this->autoloader->setClass([__CLASS__ => __FILE__]);
-
 		$this->assertEquals(
 			\array_merge($classes, [__CLASS__ => __FILE__]),
 			$this->autoloader->getClass()
@@ -57,7 +50,6 @@ class AutoloaderTest extends TestCase
 	{
 
 	}*/
-
 	/*public function testLoadClass()
 	{
 		$this->assertInstanceOf(

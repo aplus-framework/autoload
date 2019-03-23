@@ -1,14 +1,56 @@
 {
-    "name": "framework/autoload",
-    "autoload": {
-        "psr-4": {
-            "Framework\\Autoload\\": "src/"
-        }
-    },
-    "require": {
-        "php": ">=7.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5"
-    }
+	"name": "framework/autoload",
+	"type": "library",
+	"description": "The Autoload package",
+	"keywords": [
+		"autoload",
+		"preload"
+	],
+	"homepage": "https://gitlab.com/the-framework/autoload",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Natan Felles",
+			"email": "natanfelles@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=7.3"
+	},
+	"require-dev": {
+		"ext-xdebug": "*",
+		"apigen/apigen": "dev-master#85290e8",
+		"friendsofphp/php-cs-fixer": "^2.14",
+		"localheinz/composer-normalize": "^1.1",
+		"phpmd/phpmd": "^2.6",
+		"phpstan/phpstan": "^0.11",
+		"phpunit/phpunit": "^7.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Framework\\Autoload\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Autoload\\": "tests/"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"scripts": {
+		"post-install-cmd": [
+			".hooks/init"
+		],
+		"post-update-cmd": [
+			"composer dump-autoload"
+		]
+	},
+	"support": {
+		"email": "natanfelles@gmail.com",
+		"issues": "https://gitlab.com/the-framework/autoload/issues",
+		"wiki": "https://gitlab.com/the-framework/packages/autoload",
+		"source": "https://gitlab.com/the-framework/autoload",
+		"docs": "https://the-framework.gitlab.io/the-framework/packages/autoload/docs"
+	}
 }
