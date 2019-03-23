@@ -6,14 +6,14 @@
 class Locator
 {
 	/**
-	 * @var \Framework\Autoload\Autoloader
+	 * @var Autoloader
 	 */
 	protected $autoloader;
 
 	/**
 	 * Locator constructor.
 	 *
-	 * @param \Framework\Autoload\Autoloader $autoloader
+	 * @param Autoloader $autoloader
 	 */
 	public function __construct(Autoloader $autoloader)
 	{
@@ -70,13 +70,12 @@ class Locator
 		if ($extension) {
 			$file = $this->ensureExtension($file, $extension);
 		}
-		$file = \strtr($file, '\\', '/');
-		$file = \ltrim($file, '/');
+		$file = \strtr(\ltrim($file, '/'), ['\\' => '/']);
 		$segments = \explode('/', $file);
-		$count = \count($segments);
-		$file = $segments[$count - 1];
-		unset($segments[$count - 1]);
-		$namespaces = $this->autoloader->getNamespace();
+		$count = \count($segments) - 1;
+		$file = $segments[$count];
+		unset($segments[$count]);
+		$namespaces = $this->autoloader->getNamespaces();
 		$namespace = '';
 		while ($segments) {
 			$namespace .= empty($namespace)
@@ -90,7 +89,7 @@ class Locator
 		return \is_file($file) ? $file : false;
 	}
 
-	protected function ensureExtension(string $filename, string $extension)
+	protected function ensureExtension(string $filename, string $extension) : string
 	{
 		if (\mb_substr($filename, -\mb_strlen($extension)) !== $extension) {
 			$filename .= $extension;
@@ -112,7 +111,7 @@ class Locator
 			$filename = $this->ensureExtension($filename, $extension);
 		}
 		$files = [];
-		foreach ($this->autoloader->getNamespace() as $namespace => $directory) {
+		foreach ($this->autoloader->getNamespaces() as $directory) {
 			if (\is_file($directory .= $filename)) {
 				$files[] = $directory;
 			}
@@ -130,7 +129,7 @@ class Locator
 	public function getFiles(string $sub_directory) : array
 	{
 		$namespaced_files = [];
-		foreach ($this->autoloader->getNamespace() as $namespace => $directory) {
+		foreach ($this->autoloader->getNamespaces() as $directory) {
 			$files = $this->listFiles($directory . $sub_directory);
 			if ($files) {
 				$namespaced_files = \array_merge($namespaced_files, $files);
@@ -142,30 +141,30 @@ class Locator
 	/**
 	 * Get a list of all files inside a directory.
 	 *
-	 * @param string $absolute_directory Absolute directory path
+	 * @param string $directory Absolute directory path
 	 *
 	 * @return array|false returns an array of file paths or false if the directory can not be
 	 *                     resolved
 	 */
-	public function listFiles(string $absolute_directory)
+	public function listFiles(string $directory)
 	{
-		$absolute_directory = \realpath($absolute_directory);
-		if ($absolute_directory === false) {
+		$directory = \realpath($directory);
+		if ($directory === false) {
 			return false;
 		}
-		$absolute_directory .= \DIRECTORY_SEPARATOR;
-		$filenames = \scandir($absolute_directory);
+		$directory .= \DIRECTORY_SEPARATOR;
 		$files = [];
-		foreach ($filenames as $filename) {
+		foreach (\scandir($directory, 0) as $filename) {
 			if ($filename === '.' || $filename === '..') {
 				continue;
 			}
-			if (\is_file($absolute_directory . $filename)) {
-				$files[] = $absolute_directory . $filename;
+			$filename = $directory . $filename;
+			if (\is_file($filename)) {
+				$files[] = $filename;
 				continue;
 			}
-			foreach ($this->listFiles($absolute_directory . $filename) as $sub) {
-				$files[] = $sub;
+			foreach ($this->listFiles($filename) as $sub_directory) {
+				$files[] = $sub_directory;
 			}
 		}
 		return $files;

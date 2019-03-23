@@ -21,34 +21,34 @@ class Autoloader
 	/**
 	 * Autoloader constructor.
 	 *
-	 * @param bool   $register        register the {@see Autoloader::loadClass} as autoload
-	 *                                implementation
-	 * @param string $file_extensions a comma delimited list of file extensions for spl_autoload
+	 * @param bool   $register   Register the {@see Autoloader::loadClass} as autoload
+	 *                           implementation
+	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
 	 */
-	public function __construct(bool $register = true, string $file_extensions = '.php')
+	public function __construct(bool $register = true, string $extensions = '.php')
 	{
 		if ($register) {
-			$this->register($file_extensions);
+			$this->register($extensions);
 		}
 	}
 
 	/**
 	 * Registers the {@see Autoloader::loadClass} as autoload implementation.
 	 *
-	 * @param string $file_extensions a comma delimited list of file extensions for spl_autoload
+	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
 	 *
-	 * @return bool true on success or false on failure
+	 * @return bool True on success or false on failure
 	 */
-	public function register(string $file_extensions = '.php') : bool
+	public function register(string $extensions = '.php') : bool
 	{
-		\spl_autoload_extensions($file_extensions);
+		\spl_autoload_extensions($extensions);
 		return \spl_autoload_register([$this, 'loadClass'], true, true);
 	}
 
 	/**
 	 * Unregisters the {@see Autoloader::loadClass} as autoload implementation.
 	 *
-	 * @return bool true on success or false on failure
+	 * @return bool True on success or false on failure
 	 */
 	public function unregister() : bool
 	{
@@ -58,115 +58,135 @@ class Autoloader
 	/**
 	 * Sets namespaces mapping for directory paths.
 	 *
-	 * @param array|string $namespace
-	 * @param string|null  $directory
+	 * @param string $namespace
+	 * @param string $directory
 	 *
 	 * @return $this
 	 */
-	public function setNamespace($namespace, string $directory = null)
+	public function setNamespace(string $namespace, string $directory)
 	{
-		if (\is_array($namespace)) {
-			foreach ($namespace as $name => $directory) {
-				$this->namespaces[$this->getRealName($name)] = $this->getRealPath($directory);
-			}
-			return $this;
-		}
-		$this->namespaces[$this->getRealName($namespace)] = $this->getRealPath($directory);
+		$this->namespaces[$this->renderRealName($namespace)] = $this->renderDirectoryPath($directory);
+		$this->sortNamespaces();
+		return $this;
+	}
+
+	protected function sortNamespaces()
+	{
 		\krsort($this->namespaces);
+	}
+
+	public function setNamespaces(array $namespaces)
+	{
+		foreach ($namespaces as $name => $directory) {
+			$this->setNamespace($name, $directory);
+		}
+		$this->sortNamespaces();
 		return $this;
 	}
 
 	/**
 	 * Gets the directory path for a given namespace.
 	 *
-	 * @param string|null $namespace leave null to return an array of all setted namespaces
+	 * @param string $name
 	 *
-	 * @return array|false|string
+	 * @return false|string
 	 */
-	public function getNamespace(string $namespace = null)
+	public function getNamespace(string $name)
 	{
-		if ($namespace === null) {
-			return $this->namespaces;
-		}
-		return $this->namespaces[$this->getRealName($namespace)] ?? false;
+		return $this->namespaces[$this->renderRealName($name)] ?? false;
+	}
+
+	public function getNamespaces() : array
+	{
+		return $this->namespaces;
 	}
 
 	/**
-	 * @param array|string $namespace
+	 * @param string $name
 	 *
 	 * @return $this
 	 */
-	public function removeNamespace($namespace)
+	public function removeNamespace(string $name)
 	{
-		if (\is_array($namespace)) {
-			foreach ($namespace as $name) {
-				unset($this->namespaces[$this->getRealName($name)]);
-			}
-			return $this;
+		unset($this->namespaces[$this->renderRealName($name)]);
+		return $this;
+	}
+
+	public function removeNamespaces(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeNamespace($name);
 		}
-		unset($this->namespaces[$this->getRealName($namespace)]);
 		return $this;
 	}
 
 	/**
 	 * Sets classes mapping for file paths.
 	 *
-	 * @param array|string $class    Fully qualified class name (with namespace) or a list with
-	 *                               file paths
-	 * @param string|null  $filepath
+	 * @param string $name     Fully qualified class name (with namespace)
+	 * @param string $filepath
 	 *
 	 * @return $this
 	 */
-	public function setClass($class, string $filepath = null)
+	public function setClass(string $name, string $filepath)
 	{
-		if (\is_array($class)) {
-			foreach ($class as $name => $filepath) {
-				$this->classes[$this->getRealName($name)] = $this->getRealPath($filepath, false);
-			}
-			return $this;
+		$this->classes[$this->renderRealName($name)] = $this->renderFilePath($filepath);
+		return $this;
+	}
+
+	public function setClasses(array $classes)
+	{
+		foreach ($classes as $name => $filepath) {
+			$this->setClass($name, $filepath);
 		}
-		$this->classes[$this->getRealName($class)] = $this->getRealPath($filepath, false);
 		return $this;
 	}
 
 	/**
 	 * Get class filepath.
 	 *
-	 * @param string|null $class fully qualified class name (with namespace) or null to return all
+	 * @param string $name Fully qualified class name (with namespace)
 	 *
-	 * @return array|string|null
+	 * @return false|string
 	 */
-	public function getClass(string $class = null)
+	public function getClass(string $name)
 	{
-		if ($class === null) {
-			return $this->classes;
-		}
-		return $this->classes[$this->getRealName($class)] ?? null;
+		return $this->classes[$this->renderRealName($name)] ?? false;
 	}
 
-	public function removeClass($class)
+	public function getClasses() : array
 	{
-		if (\is_array($class)) {
-			foreach ($class as $name) {
-				unset($this->classes[$this->getRealName($name)]);
-			}
-			return $this;
+		return $this->classes;
+	}
+
+	public function removeClass(string $name)
+	{
+		unset($this->classes[$this->renderRealName($name)]);
+		return $this;
+	}
+
+	public function removeClasses(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeClass($name);
 		}
-		unset($this->classes[$this->getRealName($class)]);
 		return $this;
 	}
 
 	public function findClassPath(string $class)
 	{
-		if ($path = $this->getClass($class)) {
+		$path = $this->getClass($class);
+		if ($path) {
 			return $path;
 		}
-		foreach ($this->getNamespace() as $namespace => $path) {
+		foreach ($this->getNamespaces() as $namespace => $path) {
 			$namespace .= '\\';
-			$ns_len = \strlen($namespace);
-			//\strpos($class,$namespace);
-			if (\substr($class, 0, $ns_len) === $namespace) {
-				$path .= \strtr(\substr($class, $ns_len), '\\', \DIRECTORY_SEPARATOR) . '.php';
+			if (\strpos($class, $namespace) === 0) {
+				$path .= \strtr(
+					\substr($class, \strlen($namespace)),
+					['\\' => \DIRECTORY_SEPARATOR]
+				);
+				$path .= '.php';
 				if (\is_file($path)) {
 					return $path;
 				}
@@ -199,36 +219,42 @@ class Autoloader
 	 *
 	 * @return string
 	 */
-	protected function getRealName(string $name) : string
+	protected function renderRealName(string $name) : string
 	{
 		return \trim($name, '\\');
 	}
 
 	/**
-	 * Gets the canonicalized absolute pathname for a file or directory.
-	 *
-	 * Adds a trailing slash if the path is a directory.
+	 * Gets the canonicalized absolute pathname for a file path.
 	 *
 	 * @param string $path
-	 * @param bool   $directory true if the path is a directory or false for a filepath
 	 *
 	 * @return string
 	 */
-	protected function getRealPath(string $path, bool $directory = true) : string
+	protected function renderFilePath(string $path) : string
 	{
 		$real = \realpath($path);
-		if ($real === false) {
-			if ($directory && ! \is_dir($real)) {
-				throw new \Exception('Directory path  "' . $path . '" could not be resolved.');
-			}
-			throw new \Exception('File path "' . $path . '" could not be resolved.');
+		if ($real === false || ! \is_file($real)) {
+			throw new \RuntimeException("Path is not a file: {$path}");
 		}
-		if ($directory && ! \is_dir($real)) {
-			throw new \Exception('The path "' . $path . '" is not a directory.');
+		return $real;
+	}
+
+	/**
+	 * Gets the canonicalized absolute pathname for a directory path.
+	 *
+	 * Adds a trailing slash.
+	 *
+	 * @param string $path
+	 *
+	 * @return string
+	 */
+	protected function renderDirectoryPath(string $path) : string
+	{
+		$real = \realpath($path);
+		if ($real === false || ! \is_dir($real)) {
+			throw new \RuntimeException("Path is not a directory: {$path}");
 		}
-		if ( ! $directory && ! \is_file($real)) {
-			throw new \Exception('The path "' . $path . '" is not a file.');
-		}
-		return $directory ? $real . \DIRECTORY_SEPARATOR : $real;
+		return $real . \DIRECTORY_SEPARATOR;
 	}
 }

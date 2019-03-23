@@ -17,8 +17,8 @@ class AutoloaderTest extends TestCase
 
 	public function testNamespaces()
 	{
-		$this->assertEmpty($this->autoloader->getNamespace());
-		$this->autoloader->setNamespace([
+		$this->assertEmpty($this->autoloader->getNamespaces());
+		$this->autoloader->setNamespaces([
 			'Tests' => __DIR__,
 			'Foo\Bar\\' => __DIR__,
 		]);
@@ -28,21 +28,21 @@ class AutoloaderTest extends TestCase
 		$this->assertEquals([
 			'Tests' => $dir,
 			'Foo\Bar' => $dir,
-		], $this->autoloader->getNamespace());
+		], $this->autoloader->getNamespaces());
 	}
 
 	public function testClasses()
 	{
-		$classes = $this->autoloader->getClass();
+		$classes = $this->autoloader->getClasses();
 		$this->autoloader->setClass('\\' . __CLASS__, __FILE__);
 		$this->assertEquals(
 			\array_merge($classes, [__CLASS__ => __FILE__]),
-			$this->autoloader->getClass()
+			$this->autoloader->getClasses()
 		);
-		$this->autoloader->setClass([__CLASS__ => __FILE__]);
+		$this->autoloader->setClasses([__CLASS__ => __FILE__]);
 		$this->assertEquals(
 			\array_merge($classes, [__CLASS__ => __FILE__]),
-			$this->autoloader->getClass()
+			$this->autoloader->getClasses()
 		);
 	}
 
