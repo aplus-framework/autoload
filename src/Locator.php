@@ -34,32 +34,28 @@ class Locator
 		if ( ! \is_file($filename)) {
 			return false;
 		}
-		$php_code = \file_get_contents($filename);
-		$tokens = \token_get_all($php_code);
-		$count = \count($tokens);
+		$tokens = \token_get_all(\file_get_contents($filename));
+		$last = \count($tokens);
 		$namespace = '';
 		$class = '';
-		for ($i = 0; $i < $count; $i++) {
-			if ($tokens[$i][0] === \T_NAMESPACE) {
-				for ($t = $i + 1; $t < $count; ++$t) {
-					if ($tokens[$t][0] === \T_STRING) {
-						$namespace .= '\\' . $tokens[$t][1];
-					} elseif ($tokens[$t] === '{' || $tokens[$t] === ';') {
+		foreach ($tokens as $current => $token) {
+			if ($token[0] === \T_NAMESPACE) {
+				for ($next = $current + 1; $next < $last; $next++) {
+					if ($tokens[$next][0] === \T_STRING) {
+						$namespace .= '\\' . $tokens[$next][1];
+					} elseif ($tokens[$next] === '{' || $tokens[$next] === ';') {
 						break;
 					}
 				}
-			} elseif ($tokens[$i][0] === \T_CLASS) {
-				for ($t = $i + 1; $t < $count; ++$t) {
-					if ($tokens[$t] === '{') {
-						// Get many classes in the same file - remove the breaks
-						//$classes[] = $namespace . '\\' . $tokens[$i + 2][1];
-						$class = $namespace . '\\' . $tokens[$i + 2][1];
-						break;
-					}
-				}
+				continue;
 			}
-			if ($class) {
-				break;
+			if ($token[0] === \T_CLASS) {
+				for ($next = $current + 1; $next < $last; $next++) {
+					if ($tokens[$next] === '{') {
+						$class = $namespace . '\\' . $tokens[$current + 2][1];
+						break 2;
+					}
+				}
 			}
 		}
 		return $class ? \ltrim($class, '\\') : false;
@@ -78,13 +74,14 @@ class Locator
 		$namespaces = $this->autoloader->getNamespaces();
 		$namespace = '';
 		while ($segments) {
-			$namespace .= empty($namespace)
+			$namespace .= $namespace === ''
 				? \array_shift($segments)
 				: '\\' . \array_shift($segments);
-			if (empty($namespaces[$namespace])) {
+			if ( ! isset($namespaces[$namespace])) {
 				continue;
 			}
-			return $namespaces[$namespace] . \implode('/', $segments) . $file;
+			$file = $namespaces[$namespace] . \implode(\DIRECTORY_SEPARATOR, $segments) . $file;
+			break;
 		}
 		return \is_file($file) ? $file : false;
 	}
@@ -132,10 +129,10 @@ class Locator
 		foreach ($this->autoloader->getNamespaces() as $directory) {
 			$files = $this->listFiles($directory . $sub_directory);
 			if ($files) {
-				$namespaced_files = \array_merge($namespaced_files, $files);
+				$namespaced_files[] = $files;
 			}
 		}
-		return $namespaced_files;
+		return $namespaced_files ? \array_merge(...$namespaced_files) : [];
 	}
 
 	/**

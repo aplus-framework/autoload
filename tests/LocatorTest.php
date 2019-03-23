@@ -24,20 +24,30 @@ class LocatorTest extends TestCase
 	public function testListFiles()
 	{
 		$this->assertFalse($this->locator->listFiles(__DIR__ . '/unknown'));
-		$this->assertEquals([
+		$list = [
 			__DIR__ . '/AutoloaderTest.php',
 			__FILE__,
-		], $this->locator->listFiles(__DIR__));
-		$this->assertEquals([
-			__DIR__ . '/AutoloaderTest.php',
-			__FILE__,
-		], $this->locator->listFiles(__DIR__ . '/../tests'));
+			__DIR__ . '/support/NamespacedClass.php',
+			__DIR__ . '/support/NoClass.php',
+			__DIR__ . '/support/OneClass.php',
+		];
+		$this->assertEquals($list, $this->locator->listFiles(__DIR__));
+		$this->assertEquals($list, $this->locator->listFiles(__DIR__ . '/../tests'));
 	}
 
 	public function testGetClass()
 	{
 		$this->assertEquals(__CLASS__, $this->locator->getClassName(__FILE__));
 		$this->assertFalse($this->locator->getClassName(__DIR__ . '/unknown'));
+		$this->assertEquals(
+			'Foo\\Bar',
+			$this->locator->getClassName(__DIR__ . '/support/NamespacedClass.php')
+		);
+		$this->assertFalse($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));
+		$this->assertEquals(
+			'OneClass',
+			$this->locator->getClassName(__DIR__ . '/support/OneClass.php')
+		);
 	}
 
 	public function testGetFiles()
@@ -47,6 +57,9 @@ class LocatorTest extends TestCase
 			[
 				__DIR__ . '/AutoloaderTest.php',
 				__FILE__,
+				__DIR__ . '/support/NamespacedClass.php',
+				__DIR__ . '/support/NoClass.php',
+				__DIR__ . '/support/OneClass.php',
 			],
 			$this->locator->getFiles('tests')
 		);
