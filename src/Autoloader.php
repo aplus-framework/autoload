@@ -42,7 +42,7 @@ class Autoloader
 	public function register(string $extensions = '.php') : bool
 	{
 		\spl_autoload_extensions($extensions);
-		return \spl_autoload_register([$this, 'loadClass'], true, true);
+		return \spl_autoload_register([$this, 'loadClass'], true, false);
 	}
 
 	/**
