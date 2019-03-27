@@ -56,10 +56,10 @@ class Autoloader
 	}
 
 	/**
-	 * Sets namespaces mapping for directory paths.
+	 * Sets one namespace mapping for a directory path.
 	 *
-	 * @param string $namespace
-	 * @param string $directory
+	 * @param string $namespace Namespace name
+	 * @param string $directory Directory path
 	 *
 	 * @return $this
 	 */
@@ -75,6 +75,14 @@ class Autoloader
 		\krsort($this->namespaces);
 	}
 
+	/**
+	 * Sets namespaces mapping for directory paths.
+	 *
+	 * @param array $namespaces Associative array with namespace names as keys and directory paths
+	 *                          as values
+	 *
+	 * @return $this
+	 */
 	public function setNamespaces(array $namespaces)
 	{
 		foreach ($namespaces as $name => $directory) {
@@ -87,22 +95,29 @@ class Autoloader
 	/**
 	 * Gets the directory path for a given namespace.
 	 *
-	 * @param string $name
+	 * @param string $name Namespace name
 	 *
-	 * @return false|string
+	 * @return false|string The directory path or false if namespace is not mapped
 	 */
 	public function getNamespace(string $name)
 	{
 		return $this->namespaces[$this->renderRealName($name)] ?? false;
 	}
 
+	/**
+	 * Gets all mapped namespaces.
+	 *
+	 * @return array
+	 */
 	public function getNamespaces() : array
 	{
 		return $this->namespaces;
 	}
 
 	/**
-	 * @param string $name
+	 * Removes one namespace from the mapping.
+	 *
+	 * @param string $name Namespace name
 	 *
 	 * @return $this
 	 */
@@ -112,6 +127,13 @@ class Autoloader
 		return $this;
 	}
 
+	/**
+	 * Removes namespaces from the mapping.
+	 *
+	 * @param array $names List of namespace names
+	 *
+	 * @return $this
+	 */
 	public function removeNamespaces(array $names)
 	{
 		foreach ($names as $name) {
@@ -121,10 +143,10 @@ class Autoloader
 	}
 
 	/**
-	 * Sets classes mapping for file paths.
+	 * Sets one class mapping for a file path.
 	 *
 	 * @param string $name     Fully qualified class name (with namespace)
-	 * @param string $filepath
+	 * @param string $filepath Class file path
 	 *
 	 * @return $this
 	 */
@@ -134,6 +156,13 @@ class Autoloader
 		return $this;
 	}
 
+	/**
+	 * Sets classes mapping for file paths.
+	 *
+	 * @param array $classes Associative array with class names as keys and file paths as values
+	 *
+	 * @return $this
+	 */
 	public function setClasses(array $classes)
 	{
 		foreach ($classes as $name => $filepath) {
@@ -143,28 +172,47 @@ class Autoloader
 	}
 
 	/**
-	 * Get class filepath.
+	 * Gets a class file path.
 	 *
 	 * @param string $name Fully qualified class name (with namespace)
 	 *
-	 * @return false|string
+	 * @return false|string The file path or false if class is not mapped
 	 */
 	public function getClass(string $name)
 	{
 		return $this->classes[$this->renderRealName($name)] ?? false;
 	}
 
+	/**
+	 * Gets all mapped classes.
+	 *
+	 * @return array
+	 */
 	public function getClasses() : array
 	{
 		return $this->classes;
 	}
 
+	/**
+	 * Removes one class from the mapping.
+	 *
+	 * @param string $name Fully qualified class name (with namespace)
+	 *
+	 * @return $this
+	 */
 	public function removeClass(string $name)
 	{
 		unset($this->classes[$this->renderRealName($name)]);
 		return $this;
 	}
 
+	/**
+	 * Removes classes from the mapping.
+	 *
+	 * @param array $names List of class names
+	 *
+	 * @return $this
+	 */
 	public function removeClasses(array $names)
 	{
 		foreach ($names as $name) {
@@ -173,6 +221,13 @@ class Autoloader
 		return $this;
 	}
 
+	/**
+	 * Finds the file path of a class searching in the class mapping and resolving namespaces.
+	 *
+	 * @param string $class Fully qualified class name (with namespace)
+	 *
+	 * @return false|string The class file path or false if not found
+	 */
 	public function findClassPath(string $class)
 	{
 		$path = $this->getClass($class);
@@ -196,11 +251,11 @@ class Autoloader
 	}
 
 	/**
-	 * Load a class file.
+	 * Loads a class file.
 	 *
-	 * @param string $class
+	 * @param string $class Fully qualified class name (with namespace)
 	 *
-	 * @return bool true if the file is loaded, otherwise false
+	 * @return bool TRUE if the file is loaded, otherwise FALSE
 	 */
 	public function loadClass(string $class) : bool
 	{
@@ -213,9 +268,9 @@ class Autoloader
 	}
 
 	/**
-	 * Gets a class or namespace name without lateral slashes.
+	 * Renders a class or namespace name without lateral slashes.
 	 *
-	 * @param string $name
+	 * @param string $name Class or namespace name
 	 *
 	 * @return string
 	 */
@@ -225,9 +280,9 @@ class Autoloader
 	}
 
 	/**
-	 * Gets the canonicalized absolute pathname for a file path.
+	 * Renders the canonicalized absolute pathname for a file path.
 	 *
-	 * @param string $path
+	 * @param string $path File path
 	 *
 	 * @return string
 	 */
