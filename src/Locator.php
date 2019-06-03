@@ -80,7 +80,10 @@ class Locator
 			if ( ! isset($namespaces[$namespace])) {
 				continue;
 			}
-			$file = $namespaces[$namespace] . \implode(\DIRECTORY_SEPARATOR, $segments) . $file;
+			$file = \rtrim(
+				$namespaces[$namespace] . \implode(\DIRECTORY_SEPARATOR, $segments),
+				\DIRECTORY_SEPARATOR
+				) . \DIRECTORY_SEPARATOR . $file;
 			break;
 		}
 		return \is_file($file) ? $file : false;
