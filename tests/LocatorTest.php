@@ -7,15 +7,15 @@ use PHPUnit\Framework\TestCase;
 class LocatorTest extends TestCase
 {
 	/**
-	 * @var \Framework\Autoload\Autoloader
+	 * @var Autoloader
 	 */
 	protected $autoloader;
 	/**
-	 * @var \Framework\Autoload\Locator
+	 * @var Locator
 	 */
 	protected $locator;
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->autoloader = new Autoloader();
 		$this->locator = new Locator($this->autoloader);

@@ -10,7 +10,7 @@ class AutoloaderTest extends TestCase
 	 */
 	protected $autoloader;
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->autoloader = new Autoloader();
 	}
@@ -43,16 +43,16 @@ class AutoloaderTest extends TestCase
 		]);
 		$this->assertEquals(
 			[
-			__CLASS__ => __FILE__,
-			'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
-		],
+				__CLASS__ => __FILE__,
+				'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
+			],
 			$this->autoloader->getClasses()
 		);
 		$this->autoloader->removeClasses([__CLASS__]);
 		$this->assertEquals(
 			[
-			'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
-		],
+				'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
+			],
 			$this->autoloader->getClasses()
 		);
 	}
