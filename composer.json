@@ -1,12 +1,12 @@
 {
 	"name": "framework/autoload",
 	"type": "library",
-	"description": "The Autoload package",
+	"description": "The Framework Autoload Library",
 	"keywords": [
 		"autoload",
 		"preload"
 	],
-	"homepage": "https://gitlab.com/the-framework/autoload",
+	"homepage": "https://the-framework.gitlab.io/libraries/autoload.html",
 	"license": "proprietary",
 	"authors": [
 		{
@@ -53,9 +53,9 @@
 	},
 	"support": {
 		"email": "natanfelles@gmail.com",
-		"issues": "https://gitlab.com/the-framework/autoload/issues",
-		"wiki": "https://gitlab.com/the-framework/packages/autoload",
-		"source": "https://gitlab.com/the-framework/autoload",
-		"docs": "https://the-framework.gitlab.io/the-framework/packages/autoload/docs"
+		"issues": "https://gitlab.com/the-framework/libraries/autoload/issues",
+		"wiki": "https://gitlab.com/the-framework/libraries/autoload/wikis/home",
+		"source": "https://gitlab.com/the-framework/libraries/autoload",
+		"docs": "https://the-framework.gitlab.io/the-framework/libraries/autoload/docs/"
 	}
 }
