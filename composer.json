@@ -7,7 +7,7 @@
 		"preload"
 	],
 	"homepage": "https://the-framework.gitlab.io/libraries/autoload.html",
-	"license": "proprietary",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Natan Felles",
