@@ -2,6 +2,8 @@
 
 /**
  * Class Locator.
+ *
+ * The Locator class has methods for finding files and the class FQDN using an Autoloader instance.
  */
 class Locator
 {
