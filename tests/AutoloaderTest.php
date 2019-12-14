@@ -24,7 +24,7 @@ class AutoloaderTest extends TestCase
 		]);
 		$dir = __DIR__ . \DIRECTORY_SEPARATOR;
 		$this->assertEquals($dir, $this->autoloader->getNamespace('Tests'));
-		$this->assertFalse($this->autoloader->getNamespace('Testss'));
+		$this->assertNull($this->autoloader->getNamespace('Testss'));
 		$this->assertEquals([
 			'Tests' => $dir,
 			'Foo\Bar' => $dir,
@@ -59,7 +59,7 @@ class AutoloaderTest extends TestCase
 
 	public function testFindClassPath()
 	{
-		$this->assertFalse($this->autoloader->findClassPath(__CLASS__));
+		$this->assertNull($this->autoloader->findClassPath(__CLASS__));
 		$this->autoloader->setNamespace(__NAMESPACE__, __DIR__);
 		$this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
 		$this->autoloader->setClass(__CLASS__, __FILE__);

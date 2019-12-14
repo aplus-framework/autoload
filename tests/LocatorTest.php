@@ -23,7 +23,7 @@ class LocatorTest extends TestCase
 
 	public function testListFiles()
 	{
-		$this->assertFalse($this->locator->listFiles(__DIR__ . '/unknown'));
+		$this->assertNull($this->locator->listFiles(__DIR__ . '/unknown'));
 		$list = [
 			__DIR__ . '/AutoloaderTest.php',
 			__FILE__,
@@ -38,12 +38,12 @@ class LocatorTest extends TestCase
 	public function testGetClass()
 	{
 		$this->assertEquals(__CLASS__, $this->locator->getClassName(__FILE__));
-		$this->assertFalse($this->locator->getClassName(__DIR__ . '/unknown'));
+		$this->assertNull($this->locator->getClassName(__DIR__ . '/unknown'));
 		$this->assertEquals(
 			'Foo\NamespacedClass',
 			$this->locator->getClassName(__DIR__ . '/support/NamespacedClass.php')
 		);
-		$this->assertFalse($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));
+		$this->assertNull($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));
 		$this->assertEquals(
 			'OneClass',
 			$this->locator->getClassName(__DIR__ . '/support/OneClass.php')
@@ -97,7 +97,7 @@ class LocatorTest extends TestCase
 			__FILE__,
 			$this->locator->getNamespacedFilepath('Tests/LocatorTest')
 		);
-		$this->assertFalse(
+		$this->assertNull(
 			$this->locator->getNamespacedFilepath('LocatorTest')
 		);
 	}

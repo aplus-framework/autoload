@@ -29,12 +29,12 @@ class Locator
 	 *
 	 * @see http://php.net/manual/pt_BR/language.namespaces.rules.php
 	 *
-	 * @return false|string
+	 * @return string|null
 	 */
-	public function getClassName(string $filename)
+	public function getClassName(string $filename) : ?string
 	{
 		if ( ! \is_file($filename)) {
-			return false;
+			return null;
 		}
 		$tokens = \token_get_all(\file_get_contents($filename));
 		$last = \count($tokens);
@@ -60,10 +60,10 @@ class Locator
 				}
 			}
 		}
-		return $class ? \ltrim($class, '\\') : false;
+		return $class ? \ltrim($class, '\\') : null;
 	}
 
-	public function getNamespacedFilepath(string $file, string $extension = '.php')
+	public function getNamespacedFilepath(string $file, string $extension = '.php') : ?string
 	{
 		if ($extension) {
 			$file = $this->ensureExtension($file, $extension);
@@ -88,7 +88,7 @@ class Locator
 			) . \DIRECTORY_SEPARATOR . $file;
 			break;
 		}
-		return \is_file($file) ? $file : false;
+		return \is_file($file) ? $file : null;
 	}
 
 	protected function ensureExtension(string $filename, string $extension) : string
@@ -105,7 +105,7 @@ class Locator
 	 * @param string $filename
 	 * @param string $extension
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	public function findFiles(string $filename, string $extension = '.php') : array
 	{
@@ -126,7 +126,7 @@ class Locator
 	 *
 	 * @param string $sub_directory Sub directory path
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	public function getFiles(string $sub_directory) : array
 	{
@@ -145,14 +145,14 @@ class Locator
 	 *
 	 * @param string $directory Absolute directory path
 	 *
-	 * @return array|false returns an array of file paths or false if the directory can not be
-	 *                     resolved
+	 * @return array|null returns an array of file paths or null if the directory can not be
+	 *                    resolved
 	 */
-	public function listFiles(string $directory)
+	public function listFiles(string $directory) : ?array
 	{
 		$directory = \realpath($directory);
 		if ($directory === false) {
-			return false;
+			return null;
 		}
 		$directory .= \DIRECTORY_SEPARATOR;
 		$files = [];

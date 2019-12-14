@@ -3,20 +3,21 @@
 /**
  * Class Autoloader.
  *
- * The Autoloader class allows to set namespace directories to search for files (PSR4) and set the absolute path of classes without namespaces (PSR0).
+ * The Autoloader class allows to set namespace directories to search for files (PSR4) and set the
+ * absolute path of classes without namespaces (PSR0).
  */
 class Autoloader
 {
 	/**
 	 * List of classes to file paths.
 	 *
-	 * @var array
+	 * @var array|string[]
 	 */
 	protected $classes = [];
 	/**
 	 * List of namespaces to directory paths.
 	 *
-	 * @var array
+	 * @var array|string[]
 	 */
 	protected $namespaces = [];
 
@@ -99,11 +100,11 @@ class Autoloader
 	 *
 	 * @param string $name Namespace name
 	 *
-	 * @return false|string The directory path or false if namespace is not mapped
+	 * @return string|null The directory path or null if namespace is not mapped
 	 */
-	public function getNamespace(string $name)
+	public function getNamespace(string $name) : ?string
 	{
-		return $this->namespaces[$this->renderRealName($name)] ?? false;
+		return $this->namespaces[$this->renderRealName($name)] ?? null;
 	}
 
 	/**
@@ -178,17 +179,17 @@ class Autoloader
 	 *
 	 * @param string $name Fully qualified class name (with namespace)
 	 *
-	 * @return false|string The file path or false if class is not mapped
+	 * @return string|null The file path or null if class is not mapped
 	 */
 	public function getClass(string $name)
 	{
-		return $this->classes[$this->renderRealName($name)] ?? false;
+		return $this->classes[$this->renderRealName($name)] ?? null;
 	}
 
 	/**
 	 * Gets all mapped classes.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	public function getClasses() : array
 	{
@@ -211,7 +212,7 @@ class Autoloader
 	/**
 	 * Removes classes from the mapping.
 	 *
-	 * @param array $names List of class names
+	 * @param array|string[] $names List of class names
 	 *
 	 * @return $this
 	 */
@@ -228,9 +229,9 @@ class Autoloader
 	 *
 	 * @param string $class Fully qualified class name (with namespace)
 	 *
-	 * @return false|string The class file path or false if not found
+	 * @return string|null The class file path or null if not found
 	 */
-	public function findClassPath(string $class)
+	public function findClassPath(string $class) : ?string
 	{
 		$path = $this->getClass($class);
 		if ($path) {
@@ -249,7 +250,7 @@ class Autoloader
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
