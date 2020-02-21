@@ -5,10 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class AutoloaderTest extends TestCase
 {
-	/**
-	 * @var Autoloader
-	 */
-	protected $autoloader;
+	protected Autoloader $autoloader;
 
 	public function setUp() : void
 	{

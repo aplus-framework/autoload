@@ -7,10 +7,7 @@
  */
 class Locator
 {
-	/**
-	 * @var Autoloader
-	 */
-	protected $autoloader;
+	protected Autoloader $autoloader;
 
 	/**
 	 * Locator constructor.

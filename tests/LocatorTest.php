@@ -6,14 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 class LocatorTest extends TestCase
 {
-	/**
-	 * @var Autoloader
-	 */
-	protected $autoloader;
-	/**
-	 * @var Locator
-	 */
-	protected $locator;
+	protected Autoloader $autoloader;
+	protected Locator $locator;
 
 	public function setUp() : void
 	{

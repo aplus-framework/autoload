@@ -13,13 +13,13 @@ class Autoloader
 	 *
 	 * @var array|string[]
 	 */
-	protected $classes = [];
+	protected array $classes = [];
 	/**
 	 * List of namespaces to directory paths.
 	 *
 	 * @var array|string[]
 	 */
-	protected $namespaces = [];
+	protected array $namespaces = [];
 
 	/**
 	 * Autoloader constructor.
