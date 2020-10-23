@@ -73,7 +73,7 @@ class Autoloader
 		return $this;
 	}
 
-	protected function sortNamespaces()
+	protected function sortNamespaces() : void
 	{
 		\krsort($this->namespaces);
 	}
@@ -181,7 +181,7 @@ class Autoloader
 	 *
 	 * @return string|null The file path or null if class is not mapped
 	 */
-	public function getClass(string $name)
+	public function getClass(string $name) : ?string
 	{
 		return $this->classes[$this->renderRealName($name)] ?? null;
 	}
