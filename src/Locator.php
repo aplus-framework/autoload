@@ -33,14 +33,14 @@ class Locator
 		if ( ! \is_file($filename)) {
 			return null;
 		}
-		$tokens = \token_get_all(\file_get_contents($filename));
+		$tokens = \token_get_all((string) \file_get_contents($filename));
 		$last = \count($tokens);
 		$namespace = '';
 		$class = '';
 		foreach ($tokens as $current => $token) {
 			if ($token[0] === \T_NAMESPACE) {
 				for ($next = $current + 1; $next < $last; $next++) {
-					if ($tokens[$next][0] === \T_STRING) {
+					if ($tokens[$next][0] === \T_STRING || $tokens[$next][0] === \T_NAME_QUALIFIED) {
 						$namespace .= '\\' . $tokens[$next][1];
 					} elseif ($tokens[$next] === '{' || $tokens[$next] === ';') {
 						break;
@@ -142,8 +142,8 @@ class Locator
 	 *
 	 * @param string $directory Absolute directory path
 	 *
-	 * @return array|null returns an array of file paths or null if the directory can not be
-	 *                    resolved
+	 * @return array|string[]|null returns an array of file paths or null if the directory can not
+	 *                             be resolved
 	 */
 	public function listFiles(string $directory) : ?array
 	{

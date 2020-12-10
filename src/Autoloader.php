@@ -1,5 +1,7 @@
 <?php namespace Framework\Autoload;
 
+use RuntimeException;
+
 /**
  * Class Autoloader.
  *
@@ -81,8 +83,8 @@ class Autoloader
 	/**
 	 * Sets namespaces mapping for directory paths.
 	 *
-	 * @param array $namespaces Associative array with namespace names as keys and directory paths
-	 *                          as values
+	 * @param array|string[] $namespaces Associative array with namespace names as keys and
+	 *                                   directory paths as values
 	 *
 	 * @return $this
 	 */
@@ -110,7 +112,7 @@ class Autoloader
 	/**
 	 * Gets all mapped namespaces.
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	public function getNamespaces() : array
 	{
@@ -133,7 +135,7 @@ class Autoloader
 	/**
 	 * Removes namespaces from the mapping.
 	 *
-	 * @param array $names List of namespace names
+	 * @param array|string[] $names List of namespace names
 	 *
 	 * @return $this
 	 */
@@ -162,7 +164,8 @@ class Autoloader
 	/**
 	 * Sets classes mapping for file paths.
 	 *
-	 * @param array $classes Associative array with class names as keys and file paths as values
+	 * @param array|string[] $classes Associative array with class names as keys and file paths as
+	 *                                values
 	 *
 	 * @return $this
 	 */
@@ -293,7 +296,7 @@ class Autoloader
 	{
 		$real = \realpath($path);
 		if ($real === false || ! \is_file($real)) {
-			throw new \RuntimeException("Path is not a file: {$path}");
+			throw new RuntimeException("Path is not a file: {$path}");
 		}
 		return $real;
 	}
@@ -311,7 +314,7 @@ class Autoloader
 	{
 		$real = \realpath($path);
 		if ($real === false || ! \is_dir($real)) {
-			throw new \RuntimeException("Path is not a directory: {$path}");
+			throw new RuntimeException("Path is not a directory: {$path}");
 		}
 		return $real . \DIRECTORY_SEPARATOR;
 	}
