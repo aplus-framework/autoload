@@ -21,7 +21,7 @@ test:php:
     # Run PHPUnit
     - vendor/bin/phpunit --colors=never
     # Run phpDocumentor
-    - phpdoc
+    # - phpdoc
   artifacts:
     paths:
       - build/coverage/
