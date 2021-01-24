@@ -90,7 +90,7 @@ class Locator
 
 	protected function ensureExtension(string $filename, string $extension) : string
 	{
-		if (\mb_substr($filename, -\mb_strlen($extension)) !== $extension) {
+		if ( ! \str_ends_with($filename, $extension)) {
 			$filename .= $extension;
 		}
 		return $filename;

@@ -242,7 +242,7 @@ class Autoloader
 		}
 		foreach ($this->getNamespaces() as $namespace => $path) {
 			$namespace .= '\\';
-			if (\strpos($class, $namespace) === 0) {
+			if (\str_starts_with($class, $namespace)) {
 				$path .= \strtr(
 					\substr($class, \strlen($namespace)),
 					['\\' => \DIRECTORY_SEPARATOR]
