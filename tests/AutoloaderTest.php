@@ -12,7 +12,7 @@ class AutoloaderTest extends TestCase
 		$this->autoloader = new Autoloader();
 	}
 
-	public function testNamespaces()
+	public function testNamespaces() : void
 	{
 		$this->assertEmpty($this->autoloader->getNamespaces());
 		$this->autoloader->setNamespaces([
@@ -32,7 +32,7 @@ class AutoloaderTest extends TestCase
 		], $this->autoloader->getNamespaces());
 	}
 
-	public function testClasses()
+	public function testClasses() : void
 	{
 		$this->autoloader->setClasses([
 			'\\' . __CLASS__ => __FILE__,
@@ -54,7 +54,7 @@ class AutoloaderTest extends TestCase
 		);
 	}
 
-	public function testFindClassPath()
+	public function testFindClassPath() : void
 	{
 		$this->assertNull($this->autoloader->findClassPath(__CLASS__));
 		$this->autoloader->setNamespace(__NAMESPACE__, __DIR__);
@@ -63,28 +63,28 @@ class AutoloaderTest extends TestCase
 		$this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
 	}
 
-	public function testLoadClass()
+	public function testLoadClass() : void
 	{
 		$this->assertFalse($this->autoloader->loadClass('Foo\NamespacedClass'));
 		$this->autoloader->setNamespace('Foo', __DIR__ . '/support');
 		$this->assertTrue($this->autoloader->loadClass('Foo\NamespacedClass'));
 	}
 
-	public function testPathIsNotFile()
+	public function testPathIsNotFile() : void
 	{
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Path is not a file: foo');
 		$this->autoloader->setClass('Foo', 'foo');
 	}
 
-	public function testPathIsNotDirectory()
+	public function testPathIsNotDirectory() : void
 	{
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Path is not a directory: foo');
 		$this->autoloader->setNamespace('Foo', 'foo');
 	}
 
-	public function testNewClass()
+	public function testNewClass() : void
 	{
 		$this->autoloader->setNamespace('Foo\NamespacedClass', __DIR__ . '/support');
 		$this->assertInstanceOf(
@@ -93,7 +93,7 @@ class AutoloaderTest extends TestCase
 		);
 	}
 
-	public function testUnregister()
+	public function testUnregister() : void
 	{
 		$this->assertTrue($this->autoloader->unregister());
 	}
