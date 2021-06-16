@@ -162,7 +162,7 @@ class Locator
 		}
 		$directory .= \DIRECTORY_SEPARATOR;
 		$files = [];
-		foreach (\scandir($directory, 0) as $filename) {
+		foreach ((array) \scandir($directory, 0) as $filename) {
 			if ($filename === '.' || $filename === '..') {
 				continue;
 			}

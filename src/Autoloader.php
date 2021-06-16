@@ -26,7 +26,7 @@ class Autoloader
 	/**
 	 * Autoloader constructor.
 	 *
-	 * @param bool   $register   Register the {@see Autoloader::loadClass} as
+	 * @param bool $register Register the {@see Autoloader::loadClass} as
 	 * autoload implementation
 	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
 	 */
@@ -47,6 +47,7 @@ class Autoloader
 	public function register(string $extensions = '.php') : bool
 	{
 		\spl_autoload_extensions($extensions);
+		// @phpstan-ignore-next-line
 		return \spl_autoload_register([$this, 'loadClass'], true, false);
 	}
 
