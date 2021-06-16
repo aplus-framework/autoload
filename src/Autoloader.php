@@ -270,7 +270,7 @@ class Autoloader
 	{
 		$class = $this->findClassPath($class);
 		if ($class) {
-			include $class;
+			require_isolated($class);
 			return true;
 		}
 		return false;
