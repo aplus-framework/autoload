@@ -5,29 +5,29 @@ use RuntimeException;
 /**
  * Class Autoloader.
  *
- * The Autoloader class allows to set namespace directories to search for files (PSR4) and set the
- * absolute path of classes without namespaces (PSR0).
+ * The Autoloader class allows to set namespace directories to search for files
+ * (PSR4) and set the absolute path of classes without namespaces (PSR0).
  */
 class Autoloader
 {
 	/**
 	 * List of classes to file paths.
 	 *
-	 * @var array|string[]
+	 * @var array<string,string>
 	 */
 	protected array $classes = [];
 	/**
 	 * List of namespaces to directory paths.
 	 *
-	 * @var array|string[]
+	 * @var array<string,string>
 	 */
 	protected array $namespaces = [];
 
 	/**
 	 * Autoloader constructor.
 	 *
-	 * @param bool   $register   Register the {@see Autoloader::loadClass} as autoload
-	 *                           implementation
+	 * @param bool   $register   Register the {@see Autoloader::loadClass} as
+	 * autoload implementation
 	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
 	 */
 	public function __construct(bool $register = true, string $extensions = '.php')
@@ -83,8 +83,8 @@ class Autoloader
 	/**
 	 * Sets namespaces mapping for directory paths.
 	 *
-	 * @param array|string[] $namespaces Associative array with namespace names as keys and
-	 *                                   directory paths as values
+	 * @param array<string,string> $namespaces Associative array with namespace names
+	 * as keys and directory paths as values
 	 *
 	 * @return $this
 	 */
@@ -112,7 +112,7 @@ class Autoloader
 	/**
 	 * Gets all mapped namespaces.
 	 *
-	 * @return array|string[]
+	 * @return array<string,string>
 	 */
 	public function getNamespaces() : array
 	{
@@ -135,7 +135,7 @@ class Autoloader
 	/**
 	 * Removes namespaces from the mapping.
 	 *
-	 * @param array|string[] $names List of namespace names
+	 * @param array<int,string> $names List of namespace names
 	 *
 	 * @return $this
 	 */
@@ -150,7 +150,7 @@ class Autoloader
 	/**
 	 * Sets one class mapping for a file path.
 	 *
-	 * @param string $name     Fully qualified class name (with namespace)
+	 * @param string $name Fully qualified class name (with namespace)
 	 * @param string $filepath Class file path
 	 *
 	 * @return $this
@@ -164,8 +164,8 @@ class Autoloader
 	/**
 	 * Sets classes mapping for file paths.
 	 *
-	 * @param array|string[] $classes Associative array with class names as keys and file paths as
-	 *                                values
+	 * @param array<string,string> $classes Associative array with class names
+	 * as keys and file paths as values
 	 *
 	 * @return $this
 	 */
@@ -192,7 +192,8 @@ class Autoloader
 	/**
 	 * Gets all mapped classes.
 	 *
-	 * @return array|string[]
+	 * @return array<string,string> An array of class names as keys and
+	 * file paths as values
 	 */
 	public function getClasses() : array
 	{
@@ -215,7 +216,7 @@ class Autoloader
 	/**
 	 * Removes classes from the mapping.
 	 *
-	 * @param array|string[] $names List of class names
+	 * @param array<int,string> $names List of class names
 	 *
 	 * @return $this
 	 */
@@ -228,7 +229,8 @@ class Autoloader
 	}
 
 	/**
-	 * Finds the file path of a class searching in the class mapping and resolving namespaces.
+	 * Finds the file path of a class searching in the class mapping and
+	 * resolving namespaces.
 	 *
 	 * @param string $class Fully qualified class name (with namespace)
 	 *

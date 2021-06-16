@@ -3,7 +3,8 @@
 /**
  * Class Locator.
  *
- * The Locator class has methods for finding files and the class FQDN using an Autoloader instance.
+ * The Locator class has methods for finding files and the class FQN using an
+ * Autoloader instance.
  */
 class Locator
 {
@@ -26,7 +27,7 @@ class Locator
 	 *
 	 * @see http://php.net/manual/pt_BR/language.namespaces.rules.php
 	 *
-	 * @return string|null
+	 * @return string|null The class FQN or null if not found
 	 */
 	public function getClassName(string $filename) : ?string
 	{
@@ -60,6 +61,14 @@ class Locator
 		return $class ? \ltrim($class, '\\') : null;
 	}
 
+	/**
+	 * Get the first filepath found in all namespaces.
+	 *
+	 * @param string $file The file name without extension
+	 * @param string $extension The file extension
+	 *
+	 * @return string|null The filepath or null if not found
+	 */
 	public function getNamespacedFilepath(string $file, string $extension = '.php') : ?string
 	{
 		if ($extension) {
@@ -99,10 +108,10 @@ class Locator
 	/**
 	 * Find namesake files inside namespaced directories.
 	 *
-	 * @param string $filename
-	 * @param string $extension
+	 * @param string $filename The file name
+	 * @param string $extension The file extension
 	 *
-	 * @return array|string[]
+	 * @return array<int,string> An array of filenames found
 	 */
 	public function findFiles(string $filename, string $extension = '.php') : array
 	{
@@ -123,7 +132,7 @@ class Locator
 	 *
 	 * @param string $sub_directory Sub directory path
 	 *
-	 * @return array|string[]
+	 * @return array<int,string>
 	 */
 	public function getFiles(string $sub_directory) : array
 	{
@@ -142,8 +151,8 @@ class Locator
 	 *
 	 * @param string $directory Absolute directory path
 	 *
-	 * @return array|string[]|null returns an array of file paths or null if the directory can not
-	 *                             be resolved
+	 * @return array<int,string>|null Returns an array of filenames or null
+	 * if the directory can not be resolved
 	 */
 	public function listFiles(string $directory) : ?array
 	{
