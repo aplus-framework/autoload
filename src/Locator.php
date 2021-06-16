@@ -130,15 +130,15 @@ class Locator
 	/**
 	 * Get a list of all files inside namespaced sub directories.
 	 *
-	 * @param string $sub_directory Sub directory path
+	 * @param string $subDirectory Sub directory path
 	 *
 	 * @return array<int,string>
 	 */
-	public function getFiles(string $sub_directory) : array
+	public function getFiles(string $subDirectory) : array
 	{
 		$namespaced_files = [];
 		foreach ($this->autoloader->getNamespaces() as $directory) {
-			$files = $this->listFiles($directory . $sub_directory);
+			$files = $this->listFiles($directory . $subDirectory);
 			if ($files) {
 				$namespaced_files[] = $files;
 			}
