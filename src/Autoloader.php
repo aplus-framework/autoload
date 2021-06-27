@@ -76,9 +76,9 @@ class Autoloader
 	 * @param string $namespace Namespace name
 	 * @param string $directory Directory path
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setNamespace(string $namespace, string $directory)
+	public function setNamespace(string $namespace, string $directory) : static
 	{
 		$this->namespaces[$this->renderRealName($namespace)] = $this->renderDirectoryPath($directory);
 		$this->sortNamespaces();
@@ -96,9 +96,9 @@ class Autoloader
 	 * @param array<string,string> $namespaces Associative array with namespace names
 	 * as keys and directory paths as values
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setNamespaces(array $namespaces)
+	public function setNamespaces(array $namespaces) : static
 	{
 		foreach ($namespaces as $name => $directory) {
 			$this->setNamespace($name, $directory);
@@ -134,9 +134,9 @@ class Autoloader
 	 *
 	 * @param string $name Namespace name
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function removeNamespace(string $name)
+	public function removeNamespace(string $name) : static
 	{
 		unset($this->namespaces[$this->renderRealName($name)]);
 		return $this;
@@ -147,9 +147,9 @@ class Autoloader
 	 *
 	 * @param array<int,string> $names List of namespace names
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function removeNamespaces(array $names)
+	public function removeNamespaces(array $names) : static
 	{
 		foreach ($names as $name) {
 			$this->removeNamespace($name);
@@ -163,9 +163,9 @@ class Autoloader
 	 * @param string $name Fully qualified class name (with namespace)
 	 * @param string $filepath Class file path
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setClass(string $name, string $filepath)
+	public function setClass(string $name, string $filepath) : static
 	{
 		$this->classes[$this->renderRealName($name)] = $this->renderFilePath($filepath);
 		return $this;
@@ -177,9 +177,9 @@ class Autoloader
 	 * @param array<string,string> $classes Associative array with class names
 	 * as keys and file paths as values
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setClasses(array $classes)
+	public function setClasses(array $classes) : static
 	{
 		foreach ($classes as $name => $filepath) {
 			$this->setClass($name, $filepath);
@@ -215,9 +215,9 @@ class Autoloader
 	 *
 	 * @param string $name Fully qualified class name (with namespace)
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function removeClass(string $name)
+	public function removeClass(string $name) : static
 	{
 		unset($this->classes[$this->renderRealName($name)]);
 		return $this;
@@ -228,9 +228,9 @@ class Autoloader
 	 *
 	 * @param array<int,string> $names List of class names
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function removeClasses(array $names)
+	public function removeClasses(array $names) : static
 	{
 		foreach ($names as $name) {
 			$this->removeClass($name);
