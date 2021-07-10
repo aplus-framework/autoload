@@ -285,7 +285,10 @@ class Autoloader
 	{
 		$class = $this->findClassPath($class);
 		if ($class) {
-			require_isolated($class);
+			// Require $class in a isolated scope - no access to $this
+			(static function () use ($class) : void {
+				require $class;
+			})();
 			return true;
 		}
 		return false;
