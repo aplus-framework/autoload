@@ -36,9 +36,12 @@ class Autoloader
 	/**
 	 * Autoloader constructor.
 	 *
-	 * @param bool $register Register the {@see Autoloader::loadClass} as
-	 * autoload implementation
-	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
+	 * @param bool $register Register the Autoloader::loadClass() as autoload
+	 * implementation
+	 * @param string $extensions A comma delimited list of file extensions for
+	 * spl_autoload
+	 *
+	 * @see Autoloader::loadClass()
 	 */
 	public function __construct(bool $register = true, string $extensions = '.php')
 	{
@@ -48,9 +51,12 @@ class Autoloader
 	}
 
 	/**
-	 * Registers the {@see Autoloader::loadClass} as autoload implementation.
+	 * Registers the Autoloader::loadClass() as autoload implementation.
 	 *
-	 * @param string $extensions A comma delimited list of file extensions for spl_autoload
+	 * @param string $extensions A comma delimited list of file extensions for
+	 * spl_autoload
+	 *
+	 * @see Autoloader::loadClass()
 	 *
 	 * @return bool True on success or false on failure
 	 */
@@ -62,7 +68,9 @@ class Autoloader
 	}
 
 	/**
-	 * Unregisters the {@see Autoloader::loadClass} as autoload implementation.
+	 * Unregisters the Autoloader::loadClass() as autoload implementation.
+	 *
+	 * @see Autoloader::loadClass()
 	 *
 	 * @return bool True on success or false on failure
 	 */
