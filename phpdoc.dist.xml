@@ -16,7 +16,7 @@
 			<source dsn=".">
 				<path>src</path>
 			</source>
-			<default-package-name>autoload</default-package-name>
+			<default-package-name>Autoload</default-package-name>
 			<include-source>true</include-source>
 		</api>
 		<guide>
