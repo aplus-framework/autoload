@@ -1,7 +1,7 @@
 {
-    "name": "natanfelles/autoload",
+    "name": "aplus/autoload",
     "type": "library",
-    "description": "The Framework Autoload Library",
+    "description": "Aplus Framework Autoload Library",
     "keywords": [
         "autoload",
         "autoloader",
@@ -10,7 +10,7 @@
         "file-locator",
         "class-locator"
     ],
-    "homepage": "https://the-framework.gitlab.io/libraries/autoload.html",
+    "homepage": "https://aplus-framework.com/docs/autoload",
     "license": "MIT",
     "authors": [
         {
@@ -50,9 +50,9 @@
     "prefer-stable": true,
     "support": {
         "email": "natanfelles@gmail.com",
-        "issues": "https://gitlab.com/the-framework/libraries/autoload/issues",
-        "wiki": "https://gitlab.com/the-framework/libraries/autoload/wikis/home",
-        "source": "https://gitlab.com/the-framework/libraries/autoload",
-        "docs": "https://the-framework.gitlab.io/the-framework/libraries/autoload/docs/"
+        "issues": "https://gitlab.com/aplus-framework/libraries/autoload/issues",
+        "wiki": "https://gitlab.com/aplus-framework/libraries/autoload/wikis/home",
+        "source": "https://gitlab.com/aplus-framework/libraries/autoload",
+        "docs": "https://aplus-framework.gitlab.io/aplus-framework/libraries/autoload/docs/"
     }
 }
