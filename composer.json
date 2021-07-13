@@ -4,7 +4,11 @@
     "description": "The Framework Autoload Library",
     "keywords": [
         "autoload",
-        "locator"
+        "autoloader",
+        "loader",
+        "locator",
+        "file-locator",
+        "class-locator"
     ],
     "homepage": "https://the-framework.gitlab.io/libraries/autoload.html",
     "license": "MIT",
