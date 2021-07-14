@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of The Framework Autoload Library.
+ * This file is part of Aplus Framework Autoload Library.
  *
  * (c) Natan Felles <natanfelles@gmail.com>
  *
