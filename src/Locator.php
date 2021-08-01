@@ -149,14 +149,14 @@ class Locator
      */
     public function getFiles(string $subDirectory) : array
     {
-        $namespaced_files = [];
+        $namespacedFiles = [];
         foreach ($this->autoloader->getNamespaces() as $directory) {
             $files = $this->listFiles($directory . $subDirectory);
             if ($files) {
-                $namespaced_files[] = $files;
+                $namespacedFiles[] = $files;
             }
         }
-        return $namespaced_files ? \array_merge(...$namespaced_files) : [];
+        return $namespacedFiles ? \array_merge(...$namespacedFiles) : [];
     }
 
     /**
@@ -184,8 +184,8 @@ class Locator
                 $files[] = $filename;
                 continue;
             }
-            foreach ($this->listFiles($filename) as $sub_directory) {
-                $files[] = $sub_directory;
+            foreach ($this->listFiles($filename) as $subDirectory) {
+                $files[] = $subDirectory;
             }
         }
         return $files;
