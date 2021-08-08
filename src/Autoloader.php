@@ -17,6 +17,8 @@ use RuntimeException;
  *
  * The Autoloader class allows to set namespace directories to search for files
  * (PSR4) and set the absolute path of classes without namespaces (PSR0).
+ *
+ * @package autoload
  */
 class Autoloader
 {

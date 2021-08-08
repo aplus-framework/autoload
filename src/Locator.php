@@ -16,6 +16,8 @@ use JetBrains\PhpStorm\Pure;
  *
  * The Locator class has methods for finding files and the class FQN using an
  * Autoloader instance.
+ *
+ * @package autoload
  */
 class Locator
 {
