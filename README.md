@@ -1,7 +1,6 @@
 # Aplus Framework Autoload Library
 
-- [Homepage](https://aplus-framework.com/docs/autoload)
-- [API Documentation](https://aplus-framework.gitlab.io/libraries/autoload/docs/)
+- [Documentation](https://docs.aplus-framework.com/guides/libraries/autoload/)
 
 [![Pipeline](https://gitlab.com/aplus-framework/libraries/autoload/badges/master/pipeline.svg)](https://gitlab.com/aplus-framework/libraries/autoload/-/pipelines?scope=branches)
 [![Coverage](https://gitlab.com/aplus-framework/libraries/autoload/badges/master/coverage.svg?job=test:php)](https://aplus-framework.gitlab.io/libraries/autoload/coverage/)
