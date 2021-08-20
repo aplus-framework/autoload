@@ -117,25 +117,14 @@ class Preloader
             if ( ! \str_ends_with($file, '.php')) {
                 continue;
             }
-            if (\str_ends_with($file, '.phpstorm.meta.php')) {
+            $className = $this->locator->getClassName($file);
+            if ( ! $className || ! \str_starts_with($className, 'Framework\\')) {
                 continue;
             }
-            if (\str_contains($file, '/aplus/coding-standard/')) {
-                continue;
-            }
-            if (\str_contains($file, '/aplus/testing/')) {
-                continue;
-            }
-            if (\str_contains($file, '/src/Languages/')) {
-                continue;
-            }
-            if (\str_contains($file, '/src/Views/')) {
-                continue;
-            }
-            $loadedFiles[] = $file;
             (static function () use ($file) : void {
                 require_once $file;
             })();
+            $loadedFiles[] = $file;
         }
         return $loadedFiles;
     }
