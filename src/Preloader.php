@@ -49,6 +49,7 @@ class Preloader
         'Framework\Autoload' => 'autoload',
         'Framework\Cache' => 'cache',
         'Framework\CLI' => 'cli',
+        // 'Framework\CodingStandard' => 'coding-standard',
         'Framework\Config' => 'config',
         'Framework\Crypto' => 'crypto',
         'Framework\Database' => 'database',
@@ -67,6 +68,7 @@ class Preloader
         'Framework\REST' => 'rest',
         'Framework\Routing' => 'routing',
         'Framework\Session' => 'session',
+        // 'Framework\Testing' => 'testing',
         'Framework\Validation' => 'validation',
     ];
 
