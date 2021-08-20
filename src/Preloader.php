@@ -130,37 +130,43 @@ class Preloader
     }
 
     /**
-     * Get a list of all declared classes;.
+     * Get a list of all declared classes, interfaces and traits.
      *
      * @return array<int,string>
      */
-    public function getDeclaredClasses() : array
+    public static function getDeclarations() : array
     {
-        return \get_declared_classes();
+        $declarations = [
+            ...\get_declared_classes(),
+            ...\get_declared_interfaces(),
+            ...\get_declared_traits(),
+        ];
+        \sort($declarations);
+        return $declarations;
     }
 
     /**
-     * Get a list of Framework declared classes.
+     * Get a list of all Framework declarations.
      *
      * @return array<int,string>
      */
-    public function getFrameworkDeclaredClasses() : array
+    public static function getFrameworkDeclarations() : array
     {
-        $frameworkClasses = [];
-        foreach ($this->getDeclaredClasses() as $declaredClass) {
-            if (\str_starts_with($declaredClass, 'Framework\\')) {
-                $frameworkClasses[] = $declaredClass;
+        $result = [];
+        foreach (static::getDeclarations() as $declaration) {
+            if (\str_starts_with($declaration, 'Framework\\')) {
+                $result[] = $declaration;
             }
         }
-        return $frameworkClasses;
+        return $result;
     }
 
     /**
-     * Get a list of included/required files.
+     * Get a list of all included/required files.
      *
      * @return array<int,string>
      */
-    public function getIncludedFiles() : array
+    public static function getIncludedFiles() : array
     {
         return \get_included_files();
     }
