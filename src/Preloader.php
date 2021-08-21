@@ -134,7 +134,7 @@ class Preloader
      *
      * @return array<int,string>
      */
-    public static function getDeclarations() : array
+    public static function getAllDeclarations() : array
     {
         $declarations = [
             ...\get_declared_classes(),
@@ -146,14 +146,14 @@ class Preloader
     }
 
     /**
-     * Get a list of all Framework declarations.
+     * Get a list of Framework declarations.
      *
      * @return array<int,string>
      */
-    public static function getFrameworkDeclarations() : array
+    public static function getDeclarations() : array
     {
         $result = [];
-        foreach (static::getDeclarations() as $declaration) {
+        foreach (static::getAllDeclarations() as $declaration) {
             if (\str_starts_with($declaration, 'Framework\\')) {
                 $result[] = $declaration;
             }
