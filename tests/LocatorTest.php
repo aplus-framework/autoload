@@ -30,6 +30,8 @@ class LocatorTest extends TestCase
         $list = [
             __DIR__ . '/AutoloaderTest.php',
             __FILE__,
+            __DIR__ . '/PreloaderMock.php',
+            __DIR__ . '/PreloaderTest.php',
             __DIR__ . '/support/NamespacedClass.php',
             __DIR__ . '/support/NoClass.php',
             __DIR__ . '/support/OneClass.php',
@@ -60,6 +62,8 @@ class LocatorTest extends TestCase
             [
                 __DIR__ . '/AutoloaderTest.php',
                 __FILE__,
+                __DIR__ . '/PreloaderMock.php',
+                __DIR__ . '/PreloaderTest.php',
                 __DIR__ . '/support/NamespacedClass.php',
                 __DIR__ . '/support/NoClass.php',
                 __DIR__ . '/support/OneClass.php',
