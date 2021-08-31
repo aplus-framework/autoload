@@ -10,6 +10,7 @@
 namespace Tests\Autoload;
 
 use Framework\Autoload\Autoloader;
+use Framework\CodingStandard\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -45,6 +46,15 @@ class PreloaderTest extends TestCase
         );
     }
 
+    public function testIsPreloadable() : void
+    {
+        self::assertTrue($this->preloader->isPreloadable('Framework\Database\Foo'));
+        self::assertTrue($this->preloader->isPreloadable('Framework\HTTP\Foo'));
+        self::assertFalse($this->preloader->isPreloadable('Framework\CodingStandard\Foo'));
+        self::assertFalse($this->preloader->isPreloadable('Framework\Testing\Foo'));
+        self::assertFalse($this->preloader->isPreloadable('Other'));
+    }
+
     public function testLoader() : void
     {
         $className = 'Framework\Helpers\ArraySimple';
@@ -56,6 +66,7 @@ class PreloaderTest extends TestCase
         self::assertTrue(\class_exists($className, false));
         self::assertContains($className, $this->preloader::getDeclarations());
         self::assertContains($filepath, $this->preloader::getIncludedFiles());
+        self::assertNotContains(Config::class, $this->preloader::getDeclarations());
     }
 
     public function testDoNotLoadExternals() : void

@@ -43,6 +43,8 @@ class Preloader
     /**
      * Namespaces-to-packages directory names mapping.
      *
+     * Also, the keys are the preloadable namespaces.
+     *
      * @var array<string,string>
      */
     protected array $namespacesToPackages = [
@@ -104,6 +106,23 @@ class Preloader
     }
 
     /**
+     * Tells is a FQCN is preloadable.
+     *
+     * @param string $className The Fully Qualified Class Name
+     *
+     * @return bool
+     */
+    protected function isPreloadable(string $className) : bool
+    {
+        foreach (\array_keys($this->namespacesToPackages) as $namespace) {
+            if (\str_starts_with($className, $namespace . '\\')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Load files to be seen by the PHP OPcache Preloading when the engine starts.
      *
      * @return array<int,string> The loaded files
@@ -118,7 +137,7 @@ class Preloader
                 continue;
             }
             $className = $this->locator->getClassName($file);
-            if ( ! $className || ! \str_starts_with($className, 'Framework\\')) {
+            if ( ! $className || ! $this->isPreloadable($className)) {
                 continue;
             }
             (static function () use ($file) : void {

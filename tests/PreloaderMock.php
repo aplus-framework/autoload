@@ -22,4 +22,9 @@ class PreloaderMock extends Preloader
     {
         return parent::setNamespaces();
     }
+
+    public function isPreloadable(string $className) : bool
+    {
+        return parent::isPreloadable($className);
+    }
 }
