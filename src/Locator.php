@@ -34,13 +34,16 @@ class Locator
     }
 
     /**
-     * Gets the Fully Qualified Name of the given filename.
+     * Gets the first Qualified Class Name in a given filename.
+     *
+     * The "class name" can be the name of a class, an interface or a trait.
      *
      * @param string $filename
      *
-     * @see http://php.net/manual/pt_BR/language.namespaces.rules.php
+     * @see https://www.php.net/manual/en/language.namespaces.rules.php
+     * @see https://www.php.net/manual/en/language.oop5.interfaces.php
      *
-     * @return string|null The class FQN or null if not found
+     * @return string|null The class name or null if not found
      */
     public function getClassName(string $filename) : ?string
     {
@@ -62,7 +65,10 @@ class Locator
                 }
                 continue;
             }
-            if ($token[0] === \T_CLASS) {
+            if ($token[0] === \T_CLASS
+                || $token[0] === \T_INTERFACE
+                || $token[0] === \T_TRAIT
+            ) {
                 for ($next = $current + 1; $next < $last; $next++) {
                     if ($tokens[$next] === '{') {
                         $class = $namespace . '\\' . $tokens[$current + 2][1];

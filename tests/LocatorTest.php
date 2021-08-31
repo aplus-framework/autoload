@@ -35,6 +35,8 @@ class LocatorTest extends TestCase
             __DIR__ . '/support/NamespacedClass.php',
             __DIR__ . '/support/NoClass.php',
             __DIR__ . '/support/OneClass.php',
+            __DIR__ . '/support/OneInterface.php',
+            __DIR__ . '/support/OneTrait.php',
         ];
         $this->assertEquals($list, $this->locator->listFiles(__DIR__));
         $this->assertEquals($list, $this->locator->listFiles(__DIR__ . '/../tests'));
@@ -53,6 +55,14 @@ class LocatorTest extends TestCase
             'OneClass',
             $this->locator->getClassName(__DIR__ . '/support/OneClass.php')
         );
+        $this->assertEquals(
+            'OneInterface',
+            $this->locator->getClassName(__DIR__ . '/support/OneInterface.php')
+        );
+        $this->assertEquals(
+            'Foo\Bar\Baz\OneTrait',
+            $this->locator->getClassName(__DIR__ . '/support/OneTrait.php')
+        );
     }
 
     public function testGetFiles() : void
@@ -67,6 +77,8 @@ class LocatorTest extends TestCase
                 __DIR__ . '/support/NamespacedClass.php',
                 __DIR__ . '/support/NoClass.php',
                 __DIR__ . '/support/OneClass.php',
+                __DIR__ . '/support/OneInterface.php',
+                __DIR__ . '/support/OneTrait.php',
             ],
             $this->locator->getFiles('tests')
         );
