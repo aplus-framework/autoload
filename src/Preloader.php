@@ -115,7 +115,7 @@ class Preloader
     protected function isPreloadable(string $className) : bool
     {
         foreach (\array_keys($this->namespacesToPackages) as $namespace) {
-            if (\str_starts_with($className, $namespace . '\\')) {
+            if ($className === 'Aplus' || \str_starts_with($className, $namespace . '\\')) {
                 return true;
             }
         }
@@ -173,7 +173,7 @@ class Preloader
     {
         $result = [];
         foreach (static::getAllDeclarations() as $declaration) {
-            if (\str_starts_with($declaration, 'Framework\\')) {
+            if ($declaration === 'Aplus' || \str_starts_with($declaration, 'Framework\\')) {
                 $result[] = $declaration;
             }
         }
