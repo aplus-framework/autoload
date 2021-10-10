@@ -1,3 +1,5 @@
+<a href="https://gitlab.com/aplus-framework/libraries/autoload"><img src="https://gitlab.com/aplus-framework/libraries/autoload/-/raw/master/guide/image.png" alt="Aplus Framework Autoload Library" align="right" width="100"></a>
+
 # Aplus Framework Autoload Library
 
 - [User Guide](https://docs.aplus-framework.com/guides/libraries/autoload/index.html)
