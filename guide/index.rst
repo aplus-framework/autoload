@@ -1,6 +1,9 @@
 Autoload
 ========
 
+.. image:: image.png
+    :alt: Aplus Framework Autoload Library
+
 Aplus Framework Autoload Library.
 
 - `Installation`_
