@@ -2,6 +2,7 @@
 
 # Aplus Framework Autoload Library
 
+- [Homepage](https://aplus-framework.com/packages/autoload)
 - [User Guide](https://docs.aplus-framework.com/guides/libraries/autoload/index.html)
 - [API Documentation](https://docs.aplus-framework.com/packages/autoload.html)
 
