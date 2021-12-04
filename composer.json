@@ -10,7 +10,7 @@
         "file-locator",
         "class-locator"
     ],
-    "homepage": "https://docs.aplus-framework.com/guides/libraries/autoload/",
+    "homepage": "https://aplus-framework.com/packages/autoload",
     "license": "MIT",
     "authors": [
         {
@@ -52,13 +52,13 @@
     "support": {
         "email": "support@aplus-framework.com",
         "issues": "https://gitlab.com/aplus-framework/libraries/autoload/issues",
-        "wiki": "https://gitlab.com/aplus-framework/libraries/autoload/wikis/home",
+        "forum": "https://aplus-framework.com/forum",
         "source": "https://gitlab.com/aplus-framework/libraries/autoload",
         "docs": "https://docs.aplus-framework.com/guides/libraries/autoload/"
     },
     "funding": [
         {
-            "type": "other",
+            "type": "Aplus Sponsor",
             "url": "https://aplus-framework.com/sponsor"
         }
     ]
