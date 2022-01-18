@@ -9,6 +9,8 @@
  */
 namespace Framework\Autoload;
 
+use Framework\Autoload\Debug\AutoloadCollector;
+use Framework\Debug\Collector;
 use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
@@ -34,6 +36,7 @@ class Autoloader
      * @var array<string,string>
      */
     protected array $namespaces = [];
+    protected AutoloadCollector $debugCollector;
 
     /**
      * Autoloader constructor.
@@ -293,15 +296,70 @@ class Autoloader
      */
     public function loadClass(string $class) : bool
     {
+        if (isset($this->debugCollector)) {
+            return $this->loadDebug($class);
+        }
+        return $this->loadClassFile($class);
+    }
+
+    protected function loadClassFile(string $class) : bool
+    {
         $class = $this->findClassPath($class);
         if ($class) {
-            // Require $class in a isolated scope - no access to $this
+            // Require $class in an isolated scope - no access to $this
             (static function () use ($class) : void {
                 require $class;
             })();
             return true;
         }
         return false;
+    }
+
+    protected function loadDebug(string $class) : bool
+    {
+        $start = \microtime(true);
+        $loaded = $this->loadClassFile($class);
+        $end = \microtime(true);
+        $this->debugCollector->addData([
+            'start' => $start,
+            'end' => $end,
+            'class' => $class,
+            'file' => $this->findClassPath($class),
+            'loaded' => $loaded,
+        ]);
+        return $loaded;
+    }
+
+    public function setDebugCollector(AutoloadCollector $debugCollector = null, string $name = 'default') : static
+    {
+        if ($debugCollector) {
+            $this->debugCollector = $debugCollector;
+            return $this;
+        }
+        $data = [];
+        foreach ([Collector::class, AutoloadCollector::class] as $class) {
+            $start = \microtime(true);
+            $loaded = $this->loadClassFile($class);
+            $end = \microtime(true);
+            $data[] = [
+                'start' => $start,
+                'end' => $end,
+                'class' => $class,
+                'file' => $this->findClassPath($class),
+                'loaded' => $loaded,
+            ];
+        }
+        $this->debugCollector = new AutoloadCollector($name);
+        $this->debugCollector->setAutoloader($this);
+        foreach ($data as $item) {
+            $this->debugCollector->addData($item);
+        }
+        return $this;
+    }
+
+    public function getDebugCollector() : ?AutoloadCollector
+    {
+        return $this->debugCollector ?? null;
     }
 
     /**

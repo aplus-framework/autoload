@@ -40,7 +40,11 @@ class PreloaderTest extends TestCase
         self::assertNull($this->autoloader->getNamespace('Framework\CodingStandard'));
         self::assertSame(
             [
+                'Framework\Log' => \realpath($this->preloader->packagesDir . 'log/src') . '/',
+                'Framework\Language' => \realpath($this->preloader->packagesDir . 'language/src') . '/',
                 'Framework\Helpers' => $helpersDir,
+                'Framework\Debug' => \realpath($this->preloader->packagesDir . 'debug/src') . '/',
+                'Framework\CLI' => \realpath($this->preloader->packagesDir . 'cli/src') . '/',
             ],
             $this->autoloader->getNamespaces()
         );
