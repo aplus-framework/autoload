@@ -28,6 +28,23 @@ class AutoloadCollector extends Collector
         return $this;
     }
 
+    public function getActivities() : array
+    {
+        $activities = [];
+        foreach ($this->getData() as $data) {
+            if ($data['loaded']) {
+                $activities[] = [
+                    'collector' => $this->getName(),
+                    'class' => static::class,
+                    'description' => 'Load class ' . $data['class'],
+                    'start' => $data['start'],
+                    'end' => $data['end'],
+                ];
+            }
+        }
+        return $activities;
+    }
+
     public function getContents() : string
     {
         \ob_start(); ?>
