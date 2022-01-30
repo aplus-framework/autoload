@@ -57,7 +57,7 @@ class AutoloadCollector extends Collector
         <table>
             <thead>
             <tr>
-                <th>Order</th>
+                <th>#</th>
                 <th>File</th>
                 <th title="Seconds">Time</th>
             </tr>
