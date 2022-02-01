@@ -221,8 +221,11 @@ class AutoloadCollector extends Collector
         }
         $conf = \opcache_get_configuration();
         if ($conf && $conf['directives']['opcache.preload']) {
-            return '<p><strong>File:</strong> ' . \htmlentities($conf['directives']['opcache.preload']) . '</p>'
-                . '<p><strong>User:</strong> ' . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
+            $result = '<p><strong>File:</strong> ' . \htmlentities($conf['directives']['opcache.preload']) . '</p>';
+            if ($conf['directives']['opcache.preload_user']) {
+                $result .= '<p><strong>User:</strong> ' . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
+            }
+            return $result;
         }
         return '<p>Preload file has not been set.</p>';
     }
