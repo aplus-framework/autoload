@@ -216,18 +216,30 @@ class AutoloadCollector extends Collector
 
     protected function renderPreload() : string
     {
-        if ( ! \function_exists('opcache_get_configuration')) {
+        $conf = $this->getOpcacheConfiguration();
+        if ($conf === null) {
             return '<p>Preload is not available.</p>';
         }
-        $conf = \opcache_get_configuration();
-        if ($conf && $conf['directives']['opcache.preload']) {
-            $result = '<p><strong>File:</strong> ' . \htmlentities($conf['directives']['opcache.preload']) . '</p>';
-            if ($conf['directives']['opcache.preload_user']) {
-                $result .= '<p><strong>User:</strong> ' . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
+        if ($conf && ! empty($conf['directives']['opcache.preload'])) {
+            $result = '<p><strong>File:</strong> '
+                . \htmlentities($conf['directives']['opcache.preload']) . '</p>';
+            if ( ! empty($conf['directives']['opcache.preload_user'])) {
+                $result .= '<p><strong>User:</strong> '
+                    . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
             }
             return $result;
         }
         return '<p>Preload file has not been set.</p>';
+    }
+
+    /**
+     * @return array<string,mixed>|null
+     */
+    protected function getOpcacheConfiguration() : array | null
+    {
+        return \function_exists('opcache_get_configuration')
+            ? (array) \opcache_get_configuration()
+            : null;
     }
 
     protected function getDeclarationType(string $declaration) : string

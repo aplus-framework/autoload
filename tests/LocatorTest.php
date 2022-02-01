@@ -29,6 +29,7 @@ class LocatorTest extends TestCase
         $this->assertNull($this->locator->listFiles(__DIR__ . '/unknown'));
         $list = [
             __DIR__ . '/AutoloaderTest.php',
+            __DIR__ . '/Debug/AutoloadCollectorTest.php',
             __FILE__,
             __DIR__ . '/PreloaderMock.php',
             __DIR__ . '/PreloaderTest.php',
@@ -71,6 +72,7 @@ class LocatorTest extends TestCase
         $this->assertEquals(
             [
                 __DIR__ . '/AutoloaderTest.php',
+                __DIR__ . '/Debug/AutoloadCollectorTest.php',
                 __FILE__,
                 __DIR__ . '/PreloaderMock.php',
                 __DIR__ . '/PreloaderTest.php',
