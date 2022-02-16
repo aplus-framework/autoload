@@ -24,6 +24,9 @@ class LocatorTest extends TestCase
         $this->locator = new Locator($this->autoloader);
     }
 
+    /**
+     * @return array<int,string>
+     */
     protected function getFiles() : array
     {
         return [
