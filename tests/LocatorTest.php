@@ -24,10 +24,9 @@ class LocatorTest extends TestCase
         $this->locator = new Locator($this->autoloader);
     }
 
-    public function testListFiles() : void
+    protected function getFiles() : array
     {
-        $this->assertNull($this->locator->listFiles(__DIR__ . '/unknown'));
-        $list = [
+        return [
             __DIR__ . '/AutoloaderTest.php',
             __DIR__ . '/Debug/AutoloadCollectorTest.php',
             __FILE__,
@@ -36,9 +35,16 @@ class LocatorTest extends TestCase
             __DIR__ . '/support/NamespacedClass.php',
             __DIR__ . '/support/NoClass.php',
             __DIR__ . '/support/OneClass.php',
+            __DIR__ . '/support/OneEnum.php',
             __DIR__ . '/support/OneInterface.php',
             __DIR__ . '/support/OneTrait.php',
         ];
+    }
+
+    public function testListFiles() : void
+    {
+        $this->assertNull($this->locator->listFiles(__DIR__ . '/unknown'));
+        $list = $this->getFiles();
         $this->assertEquals($list, $this->locator->listFiles(__DIR__));
         $this->assertEquals($list, $this->locator->listFiles(__DIR__ . '/../tests'));
     }
@@ -64,24 +70,17 @@ class LocatorTest extends TestCase
             'Foo\Bar\Baz\OneTrait',
             $this->locator->getClassName(__DIR__ . '/support/OneTrait.php')
         );
+        $this->assertEquals(
+            'Foo\Bar\Baz\OneEnum',
+            $this->locator->getClassName(__DIR__ . '/support/OneEnum.php')
+        );
     }
 
     public function testGetFiles() : void
     {
         $this->autoloader->setNamespace('Autoload', __DIR__ . '/..');
         $this->assertEquals(
-            [
-                __DIR__ . '/AutoloaderTest.php',
-                __DIR__ . '/Debug/AutoloadCollectorTest.php',
-                __FILE__,
-                __DIR__ . '/PreloaderMock.php',
-                __DIR__ . '/PreloaderTest.php',
-                __DIR__ . '/support/NamespacedClass.php',
-                __DIR__ . '/support/NoClass.php',
-                __DIR__ . '/support/OneClass.php',
-                __DIR__ . '/support/OneInterface.php',
-                __DIR__ . '/support/OneTrait.php',
-            ],
+            $this->getFiles(),
             $this->locator->getFiles('tests')
         );
     }

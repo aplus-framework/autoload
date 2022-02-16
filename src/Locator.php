@@ -65,10 +65,12 @@ class Locator
                 }
                 continue;
             }
-            if ($token[0] === \T_CLASS
-                || $token[0] === \T_INTERFACE
-                || $token[0] === \T_TRAIT
-            ) {
+            if (\in_array($token[0], [
+                \T_CLASS,
+                \T_ENUM,
+                \T_INTERFACE,
+                \T_TRAIT,
+            ], true)) {
                 for ($next = $current + 1; $next < $last; $next++) {
                     if ($tokens[$next] === '{') {
                         $class = $namespace . '\\' . $tokens[$current + 2][1];
