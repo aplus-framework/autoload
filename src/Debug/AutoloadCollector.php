@@ -170,15 +170,21 @@ class AutoloadCollector extends Collector
             <thead>
             <tr>
                 <th>Namespace</th>
-                <th>Directory</th>
+                <th>Directories</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($namespaces as $namespace => $directory): ?>
+            <?php foreach ($namespaces as $namespace => $directories): ?>
+                <?php $count = \count($directories); ?>
                 <tr>
-                    <td><?= \htmlentities($namespace) ?></td>
-                    <td><?= \htmlentities($directory) ?></td>
+                    <td rowspan="<?= $count ?>"><?= \htmlentities($namespace) ?></td>
+                    <td><?= \htmlentities($directories[0]) ?></td>
                 </tr>
+                <?php for ($i = 1; $i < $count; $i++): ?>
+                    <tr>
+                        <td><?= \htmlentities($directories[$i]) ?></td>
+                    </tr>
+                <?php endfor ?>
             <?php endforeach ?>
             </tbody>
         </table>

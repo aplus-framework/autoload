@@ -33,7 +33,7 @@ class Autoloader
     /**
      * List of namespaces to directory paths.
      *
-     * @var array<string,string>
+     * @var array<string,array<int,string>>
      */
     protected array $namespaces = [];
     protected AutoloadCollector $debugCollector;
@@ -88,14 +88,20 @@ class Autoloader
      * Sets one namespace mapping for a directory path.
      *
      * @param string $namespace Namespace name
-     * @param string $directory Directory path
+     * @param array<string>|string $dir Directory path
      *
      * @return static
      */
-    public function setNamespace(string $namespace, string $directory) : static
+    public function setNamespace(string $namespace, array | string $dir) : static
     {
-        $this->namespaces[$this->renderRealName($namespace)] = $this->renderDirectoryPath($directory);
-        $this->sortNamespaces();
+        $directories = [];
+        foreach ((array) $dir as $directory) {
+            $directories[] = $this->renderDirectoryPath($directory);
+        }
+        if ($directories) {
+            $this->namespaces[$this->renderRealName($namespace)] = $directories;
+            $this->sortNamespaces();
+        }
         return $this;
     }
 
@@ -107,37 +113,37 @@ class Autoloader
     /**
      * Sets namespaces mapping for directory paths.
      *
-     * @param array<string,string> $namespaces Associative array with namespace names
+     * @param array<string,array<string>|string> $namespaces Namespace names
      * as keys and directory paths as values
      *
      * @return static
      */
     public function setNamespaces(array $namespaces) : static
     {
-        foreach ($namespaces as $name => $directory) {
-            $this->setNamespace($name, $directory);
+        foreach ($namespaces as $name => $dir) {
+            $this->setNamespace($name, $dir);
         }
         $this->sortNamespaces();
         return $this;
     }
 
     /**
-     * Gets the directory path for a given namespace.
+     * Gets the directory paths for a given namespace.
      *
      * @param string $name Namespace name
      *
-     * @return string|null The directory path or null if namespace is not mapped
+     * @return array<int,string> The namespace directory paths
      */
     #[Pure]
-    public function getNamespace(string $name) : ?string
+    public function getNamespace(string $name) : array
     {
-        return $this->namespaces[$this->renderRealName($name)] ?? null;
+        return $this->namespaces[$this->renderRealName($name)] ?? [];
     }
 
     /**
      * Gets all mapped namespaces.
      *
-     * @return array<string,string>
+     * @return array<string,array<int,string>>
      */
     #[Pure]
     public function getNamespaces() : array
@@ -161,7 +167,7 @@ class Autoloader
     /**
      * Removes namespaces from the mapping.
      *
-     * @param array<int,string> $names List of namespace names
+     * @param array<string> $names List of namespace names
      *
      * @return static
      */
@@ -271,16 +277,18 @@ class Autoloader
         if ($path) {
             return $path;
         }
-        foreach ($this->getNamespaces() as $namespace => $path) {
+        foreach ($this->getNamespaces() as $namespace => $paths) {
             $namespace .= '\\';
             if (\str_starts_with($class, $namespace)) {
-                $path .= \strtr(
-                    \substr($class, \strlen($namespace)),
-                    ['\\' => \DIRECTORY_SEPARATOR]
-                );
-                $path .= '.php';
-                if (\is_file($path)) {
-                    return $path;
+                foreach ($paths as $path) {
+                    $path .= \strtr(
+                        \substr($class, \strlen($namespace)),
+                        ['\\' => \DIRECTORY_SEPARATOR]
+                    );
+                    $path .= '.php';
+                    if (\is_file($path)) {
+                        return $path;
+                    }
                 }
             }
         }

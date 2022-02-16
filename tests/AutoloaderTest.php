@@ -25,19 +25,19 @@ class AutoloaderTest extends TestCase
     {
         $this->assertEmpty($this->autoloader->getNamespaces());
         $this->autoloader->setNamespaces([
+            'Foo\Bar\\' => [__DIR__, __DIR__],
             'Tests' => __DIR__,
-            'Foo\Bar\\' => __DIR__,
         ]);
         $dir = __DIR__ . \DIRECTORY_SEPARATOR;
-        $this->assertEquals($dir, $this->autoloader->getNamespace('Tests'));
-        $this->assertNull($this->autoloader->getNamespace('Testss'));
+        $this->assertEquals([$dir], $this->autoloader->getNamespace('Tests'));
+        $this->assertEmpty($this->autoloader->getNamespace('Testss'));
         $this->assertEquals([
-            'Tests' => $dir,
-            'Foo\Bar' => $dir,
+            'Tests' => [$dir],
+            'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->removeNamespaces(['Tests']);
         $this->assertEquals([
-            'Foo\Bar' => $dir,
+            'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
     }
 

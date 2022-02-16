@@ -107,10 +107,15 @@ class Locator
             if ( ! isset($namespaces[$namespace])) {
                 continue;
             }
-            $file = \rtrim(
-                $namespaces[$namespace] . \implode(\DIRECTORY_SEPARATOR, $segments),
-                \DIRECTORY_SEPARATOR
-            ) . \DIRECTORY_SEPARATOR . $file;
+            foreach ($namespaces[$namespace] as $directory) {
+                $filepath = \rtrim(
+                    $directory . \implode(\DIRECTORY_SEPARATOR, $segments),
+                    \DIRECTORY_SEPARATOR
+                ) . \DIRECTORY_SEPARATOR . $file;
+                if (\is_file($filepath)) {
+                    return $filepath;
+                }
+            }
             break;
         }
         return \is_file($file) ? $file : null;
@@ -140,9 +145,11 @@ class Locator
             $filename = $this->ensureExtension($filename, $extension);
         }
         $files = [];
-        foreach ($this->autoloader->getNamespaces() as $directory) {
-            if (\is_file($directory .= $filename)) {
-                $files[] = $directory;
+        foreach ($this->autoloader->getNamespaces() as $directories) {
+            foreach ($directories as $directory) {
+                if (\is_file($directory .= $filename)) {
+                    $files[] = $directory;
+                }
             }
         }
         return $files;
@@ -158,10 +165,12 @@ class Locator
     public function getFiles(string $subDirectory) : array
     {
         $namespacedFiles = [];
-        foreach ($this->autoloader->getNamespaces() as $directory) {
-            $files = $this->listFiles($directory . $subDirectory);
-            if ($files) {
-                $namespacedFiles[] = $files;
+        foreach ($this->autoloader->getNamespaces() as $directories) {
+            foreach ($directories as $directory) {
+                $files = $this->listFiles($directory . $subDirectory);
+                if ($files) {
+                    $namespacedFiles[] = $files;
+                }
             }
         }
         return $namespacedFiles ? \array_merge(...$namespacedFiles) : [];

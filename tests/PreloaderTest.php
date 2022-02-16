@@ -29,22 +29,22 @@ class PreloaderTest extends TestCase
 
     public function testNamespaces() : void
     {
-        self::assertNull($this->autoloader->getNamespace('Framework\Helpers'));
-        self::assertNull($this->autoloader->getNamespace('Framework\CodingStandard'));
+        self::assertEmpty($this->autoloader->getNamespace('Framework\Helpers'));
+        self::assertEmpty($this->autoloader->getNamespace('Framework\CodingStandard'));
         $this->preloader->setNamespaces();
         $helpersDir = \realpath($this->preloader->packagesDir . 'helpers/src') . '/';
         self::assertSame(
-            $helpersDir,
+            [$helpersDir],
             $this->autoloader->getNamespace('Framework\Helpers')
         );
-        self::assertNull($this->autoloader->getNamespace('Framework\CodingStandard'));
+        self::assertEmpty($this->autoloader->getNamespace('Framework\CodingStandard'));
         self::assertSame(
             [
-                'Framework\Log' => \realpath($this->preloader->packagesDir . 'log/src') . '/',
-                'Framework\Language' => \realpath($this->preloader->packagesDir . 'language/src') . '/',
-                'Framework\Helpers' => $helpersDir,
-                'Framework\Debug' => \realpath($this->preloader->packagesDir . 'debug/src') . '/',
-                'Framework\CLI' => \realpath($this->preloader->packagesDir . 'cli/src') . '/',
+                'Framework\Log' => [\realpath($this->preloader->packagesDir . 'log/src') . '/'],
+                'Framework\Language' => [\realpath($this->preloader->packagesDir . 'language/src') . '/'],
+                'Framework\Helpers' => [$helpersDir],
+                'Framework\Debug' => [\realpath($this->preloader->packagesDir . 'debug/src') . '/'],
+                'Framework\CLI' => [\realpath($this->preloader->packagesDir . 'cli/src') . '/'],
             ],
             $this->autoloader->getNamespaces()
         );

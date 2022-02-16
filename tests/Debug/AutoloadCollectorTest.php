@@ -56,7 +56,7 @@ class AutoloadCollectorTest extends TestCase
 
     public function testNamespaces() : void
     {
-        $this->autoloader->setNamespace('Foo\Bar', __DIR__);
+        $this->autoloader->setNamespace('Foo\Bar', [__DIR__, __DIR__]);
         $contents = $this->collector->getContents();
         self::assertStringContainsString(__DIR__, $contents);
         self::assertStringContainsString('Foo\Bar', $contents);

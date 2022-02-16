@@ -119,6 +119,9 @@ class LocatorTest extends TestCase
             $this->locator->getNamespacedFilepath('Tests/LocatorTest')
         );
         $this->assertNull(
+            $this->locator->getNamespacedFilepath('Tests/Foo')
+        );
+        $this->assertNull(
             $this->locator->getNamespacedFilepath('LocatorTest')
         );
     }
