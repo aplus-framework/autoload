@@ -34,7 +34,7 @@
     ],
     "require": {
         "php": ">=8.1",
-        "aplus/debug": "^2.4"
+        "aplus/debug": "^3.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -43,7 +43,7 @@
         "ergebnis/composer-normalize": "^2.23",
         "jetbrains/phpstorm-attributes": "^1.0",
         "phpmd/phpmd": "^2.11",
-        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
