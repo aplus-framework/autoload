@@ -94,12 +94,45 @@ class Autoloader
      */
     public function setNamespace(string $namespace, array | string $dir) : static
     {
-        $directories = [];
-        foreach ((array) $dir as $directory) {
-            $directories[] = $this->renderDirectoryPath($directory);
-        }
+        $directories = $this->makeRenderedDirectoryPaths((array) $dir);
         if ($directories) {
             $this->namespaces[$this->renderRealName($namespace)] = $directories;
+            $this->sortNamespaces();
+        }
+        return $this;
+    }
+
+    /**
+     * @param array<string> $directories
+     *
+     * @return array<int,string>
+     */
+    protected function makeRenderedDirectoryPaths(array $directories) : array
+    {
+        $paths = [];
+        foreach ($directories as $directory) {
+            $paths[] = $this->renderDirectoryPath($directory);
+        }
+        return $paths;
+    }
+
+    /**
+     * Adds directory paths to a namespace.
+     *
+     * @param string $namespace Namespace name
+     * @param array<string>|string $dir Directory path
+     *
+     * @return static
+     */
+    public function addNamespace(string $namespace, array | string $dir) : static
+    {
+        $directories = $this->makeRenderedDirectoryPaths((array) $dir);
+        if ($directories) {
+            $name = $this->renderRealName($namespace);
+            if (isset($this->namespaces[$name])) {
+                $directories = [...$this->namespaces[$name], ...$directories];
+            }
+            $this->namespaces[$name] = $directories;
             $this->sortNamespaces();
         }
         return $this;
@@ -124,6 +157,22 @@ class Autoloader
             $this->setNamespace($name, $dir);
         }
         $this->sortNamespaces();
+        return $this;
+    }
+
+    /**
+     * Adds directory paths to namespaces.
+     *
+     * @param array<string,array<string>|string> $namespaces Namespace names
+     * as keys and directory paths as values
+     *
+     * @return static
+     */
+    public function addNamespaces(array $namespaces) : static
+    {
+        foreach ($namespaces as $name => $dir) {
+            $this->addNamespace($name, $dir);
+        }
         return $this;
     }
 

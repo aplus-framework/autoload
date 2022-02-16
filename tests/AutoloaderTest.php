@@ -39,6 +39,12 @@ class AutoloaderTest extends TestCase
         $this->assertEquals([
             'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
+        $this->autoloader->addNamespaces([
+            '\Foo\Bar' => [__DIR__],
+        ]);
+        $this->assertEquals([
+            'Foo\Bar' => [$dir, $dir, $dir],
+        ], $this->autoloader->getNamespaces());
     }
 
     public function testClasses() : void
