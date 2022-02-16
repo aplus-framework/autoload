@@ -12,6 +12,7 @@ namespace Framework\Autoload\Debug;
 use Framework\Autoload\Autoloader;
 use Framework\Autoload\Preloader;
 use Framework\Debug\Collector;
+use UnitEnum;
 
 /**
  * Class AutoloadCollector.
@@ -251,7 +252,7 @@ class AutoloadCollector extends Collector
     protected function getDeclarationType(string $declaration) : string
     {
         if (\in_array($declaration, \get_declared_classes(), true)) {
-            return 'class';
+            return \is_subclass_of($declaration, UnitEnum::class) ? 'enum' : 'class';
         }
         if (\in_array($declaration, \get_declared_interfaces(), true)) {
             return 'interface';
