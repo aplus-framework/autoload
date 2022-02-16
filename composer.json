@@ -33,7 +33,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "aplus/debug": "^2.4"
     },
     "require-dev": {
