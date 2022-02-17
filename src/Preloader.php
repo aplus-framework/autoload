@@ -9,6 +9,8 @@
  */
 namespace Framework\Autoload;
 
+use InvalidArgumentException;
+
 require_once __DIR__ . '/Autoloader.php';
 require_once __DIR__ . '/Locator.php';
 
@@ -23,11 +25,12 @@ class Preloader
 {
     /**
      * The main 'aplus' packages directory.
-     * Normally installed with Composer in 'vendor/aplus'.
      *
      * @var string
      */
-    protected string $packagesDir = __DIR__ . '/../../';
+    protected string $packagesDir;
+    protected bool $loadPackages = true;
+    protected bool $loadDevPackages = false;
     /**
      * The Autoloader instance necessary to autoload required classes.
      *
@@ -40,86 +43,136 @@ class Preloader
      * @var Locator
      */
     protected Locator $locator;
-    /**
-     * Namespaces-to-packages directory names mapping.
-     *
-     * Also, the keys are the preloadable namespaces.
-     *
-     * @var array<string,string>
-     */
-    protected array $namespacesToPackages = [
-        'Framework\Autoload' => 'autoload',
-        'Framework\Cache' => 'cache',
-        'Framework\CLI' => 'cli',
-        // 'Framework\CodingStandard' => 'coding-standard',
-        'Framework\Config' => 'config',
-        'Framework\Crypto' => 'crypto',
-        'Framework\Database' => 'database',
-        'Framework\Date' => 'date',
-        'Framework\Debug' => 'debug',
-        'Framework\Email' => 'email',
-        'Framework\Factories' => 'factories',
-        'Framework\HTTP' => 'http',
-        'Framework\HTTP\Client' => 'http-client',
-        'Framework\Helpers' => 'helpers',
-        'Framework\Image' => 'image',
-        'Framework\Language' => 'language',
-        'Framework\Log' => 'log',
-        'Framework\MVC' => 'mvc',
-        'Framework\Pagination' => 'pagination',
-        'Framework\REST' => 'rest',
-        'Framework\Routing' => 'routing',
-        'Framework\Session' => 'session',
-        // 'Framework\Testing' => 'testing',
-        'Framework\Validation' => 'validation',
-    ];
 
     /**
      * Preloader constructor.
      *
      * @param Autoloader|null $autoloader A custom Autoloader instance or null
      * to auto initialize a new
+     * @param string|null $packagesDir The main 'aplus' packages directory or
+     * null to disable packages loading
      */
-    public function __construct(Autoloader $autoloader = null)
-    {
-        $this->packagesDir = \realpath($this->packagesDir) . '/';
+    public function __construct(
+        Autoloader $autoloader = null,
+        ?string $packagesDir = __DIR__ . '/../../'
+    ) {
+        $this->loadPackages = $packagesDir !== null;
+        if ($this->loadPackages) {
+            $this->setPackagesDir($packagesDir);
+        }
         $this->autoloader = $autoloader ?? new Autoloader();
         $this->locator = new Locator($this->autoloader);
     }
 
-    /**
-     * Set Autoloader namespaces based on namespaces-to-packages directories.
-     *
-     * @return static
-     */
-    protected function setNamespaces() : static
+    public function getAutoloader() : Autoloader
     {
-        $namespacesToDirs = [];
-        foreach ($this->namespacesToPackages as $namespace => $package) {
-            $dir = $this->packagesDir . $package . '/src';
-            if (\is_dir($dir)) {
-                $namespacesToDirs[$namespace] = $dir;
-            }
+        return $this->autoloader;
+    }
+
+    public function getLocator() : Locator
+    {
+        return $this->locator;
+    }
+
+    public function setPackagesDir(string $packagesDir) : static
+    {
+        $realpath = \realpath($packagesDir);
+        if ( ! $realpath || ! \is_dir($packagesDir)) {
+            throw new InvalidArgumentException('Invalid packages dir: ' . $packagesDir);
         }
-        $this->autoloader->setNamespaces($namespacesToDirs);
+        $this->packagesDir = $realpath . \DIRECTORY_SEPARATOR;
+        return $this;
+    }
+
+    public function getPackagesDir() : string
+    {
+        return $this->packagesDir;
+    }
+
+    public function withPackages() : static
+    {
+        $this->loadPackages = true;
+        return $this;
+    }
+
+    public function withDevPackages() : static
+    {
+        $this->loadDevPackages = true;
         return $this;
     }
 
     /**
-     * Tells is a FQCN is preloadable.
+     * @param bool $setClasses
      *
-     * @param string $className The Fully Qualified Class Name
-     *
-     * @return bool
+     * @return array<int,string>
      */
-    protected function isPreloadable(string $className) : bool
+    public function listPackagesFiles(bool $setClasses = true) : array
     {
-        foreach (\array_keys($this->namespacesToPackages) as $namespace) {
-            if ($className === 'Aplus' || \str_starts_with($className, $namespace . '\\')) {
-                return true;
+        $result = [];
+        foreach ($this->getLocator()->listFiles($this->getPackagesDir()) as $file) {
+            if ( ! \str_ends_with($file, '.php')) {
+                continue;
+            }
+            $className = $this->getLocator()->getClassName($file);
+            if ( ! $className
+                || ($className !== 'Aplus' && ! \str_starts_with($className, 'Framework\\'))
+            ) {
+                continue;
+            }
+            if ( ! $this->loadDevPackages && $this->isDevelopmentClass($className)) {
+                continue;
+            }
+            if ($setClasses) {
+                $this->getAutoloader()->setClass($className, $file);
+            }
+            $result[] = $file;
+        }
+        \sort($result);
+        return \array_unique($result);
+    }
+
+    protected function isDevelopmentClass(string $className) : bool
+    {
+        return \str_starts_with($className, 'Framework\\CodingStandard\\')
+            || \str_starts_with($className, 'Framework\\Testing\\');
+    }
+
+    /**
+     * @param bool $setClasses
+     *
+     * @return array<int,string>
+     */
+    public function listFiles(bool $setClasses = true) : array
+    {
+        $result = [];
+        foreach ($this->getAutoloader()->getClasses() as $file) {
+            $result[] = $file;
+        }
+        foreach ($this->getAutoloader()->getNamespaces() as $namespace => $directories) {
+            foreach ($directories as $directory) {
+                $files = $this->getLocator()->listFiles($directory);
+                foreach ($files as $file) {
+                    if ( ! \str_ends_with($file, '.php')) {
+                        continue;
+                    }
+                    $className = $this->getLocator()->getClassName($file);
+                    if ( ! $className
+                        || ! \str_starts_with($className, $namespace . '\\')
+                    ) {
+                        continue;
+                    }
+                    if ($setClasses) {
+                        $this->getAutoloader()->setClass($className, $file);
+                    }
+                    $result[] = $file;
+                }
             }
         }
-        return false;
+        if ($this->loadPackages) {
+            $result = [...$result, ...$this->listPackagesFiles($setClasses)];
+        }
+        \sort($result);
+        return \array_unique($result);
     }
 
     /**
@@ -129,17 +182,8 @@ class Preloader
      */
     public function load() : array
     {
-        $this->setNamespaces();
-        $files = $this->locator->listFiles($this->packagesDir);
         $loadedFiles = [];
-        foreach ($files as $file) {
-            if ( ! \str_ends_with($file, '.php')) {
-                continue;
-            }
-            $className = $this->locator->getClassName($file);
-            if ( ! $className || ! $this->isPreloadable($className)) {
-                continue;
-            }
+        foreach ($this->listFiles() as $file) {
             (static function () use ($file) : void {
                 require_once $file;
             })();

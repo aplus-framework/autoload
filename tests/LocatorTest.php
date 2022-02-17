@@ -33,7 +33,6 @@ class LocatorTest extends TestCase
             __DIR__ . '/AutoloaderTest.php',
             __DIR__ . '/Debug/AutoloadCollectorTest.php',
             __FILE__,
-            __DIR__ . '/PreloaderMock.php',
             __DIR__ . '/PreloaderTest.php',
             __DIR__ . '/support/NamespacedClass.php',
             __DIR__ . '/support/NoClass.php',
@@ -41,6 +40,7 @@ class LocatorTest extends TestCase
             __DIR__ . '/support/OneEnum.php',
             __DIR__ . '/support/OneInterface.php',
             __DIR__ . '/support/OneTrait.php',
+            __DIR__ . '/support/foo.txt',
         ];
     }
 

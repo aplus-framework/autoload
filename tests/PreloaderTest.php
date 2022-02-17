@@ -10,76 +10,164 @@
 namespace Tests\Autoload;
 
 use Framework\Autoload\Autoloader;
-use Framework\CodingStandard\Config;
+use Framework\Autoload\Preloader;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class PreloaderTest.
- */
-class PreloaderTest extends TestCase
+final class PreloaderTest extends TestCase
 {
-    protected Autoloader $autoloader;
-    protected PreloaderMock $preloader;
-
-    protected function setUp() : void
+    public function testEmptyListFiles() : void
     {
-        $this->autoloader = new Autoloader();
-        $this->preloader = new PreloaderMock($this->autoloader);
+        $preloader = new Preloader(packagesDir: __DIR__);
+        self::assertEmpty($preloader->getAutoloader()->getClasses());
+        self::assertEmpty($preloader->listPackagesFiles());
+        self::assertEmpty($preloader->listFiles());
+        self::assertEmpty($preloader->getAutoloader()->getClasses());
     }
 
-    public function testNamespaces() : void
+    public function testListFiles() : void
     {
-        self::assertEmpty($this->autoloader->getNamespace('Framework\Helpers'));
-        self::assertEmpty($this->autoloader->getNamespace('Framework\CodingStandard'));
-        $this->preloader->setNamespaces();
-        $helpersDir = \realpath($this->preloader->packagesDir . 'helpers/src') . '/';
-        self::assertSame(
-            [$helpersDir],
-            $this->autoloader->getNamespace('Framework\Helpers')
+        $autoloader = new Autoloader();
+        $autoloader->setNamespace(
+            'Foo\Bar\Baz',
+            __DIR__ . '/support'
+        )->setClass(\OneInterface::class, __DIR__ . '/support/OneInterface.php');
+        $preloader = new Preloader($autoloader, __DIR__ . '/../vendor/aplus');
+        $packageFiles = $preloader->listPackagesFiles();
+        $files = $preloader->listFiles();
+        self::assertContains(
+            \realpath(__DIR__ . '/../vendor/aplus/debug/src/Debugger.php'),
+            $packageFiles
         );
-        self::assertEmpty($this->autoloader->getNamespace('Framework\CodingStandard'));
-        self::assertSame(
-            [
-                'Framework\Log' => [\realpath($this->preloader->packagesDir . 'log/src') . '/'],
-                'Framework\Language' => [\realpath($this->preloader->packagesDir . 'language/src') . '/'],
-                'Framework\Helpers' => [$helpersDir],
-                'Framework\Debug' => [\realpath($this->preloader->packagesDir . 'debug/src') . '/'],
-                'Framework\CLI' => [\realpath($this->preloader->packagesDir . 'cli/src') . '/'],
-            ],
-            $this->autoloader->getNamespaces()
+        self::assertContains(
+            \realpath(__DIR__ . '/../vendor/aplus/debug/src/Debugger.php'),
+            $files
+        );
+        self::assertNotContains(
+            \realpath(__DIR__ . '/../vendor/aplus/coding-standard/src/Config.php'),
+            $files
+        );
+        self::assertNotContains(
+            __DIR__ . '/support/OneClass.php',
+            $files
+        );
+        self::assertContains(
+            __DIR__ . '/support/OneEnum.php',
+            $files
+        );
+        self::assertContains(
+            __DIR__ . '/support/OneInterface.php',
+            $files
+        );
+        $classes = $preloader->getAutoloader()->getClasses();
+        self::assertArrayHasKey(
+            \Framework\Debug\Debugger::class,
+            $classes
+        );
+        self::assertArrayNotHasKey(
+            \Framework\CodingStandard\Config::class,
+            $classes
+        );
+        self::assertArrayHasKey(
+            \Foo\Bar\Baz\OneEnum::class,
+            $classes
+        );
+        self::assertArrayHasKey(
+            \Foo\Bar\Baz\OneTrait::class,
+            $classes
+        );
+        self::assertArrayNotHasKey(
+            \OneClass::class,
+            $classes
+        );
+        self::assertArrayHasKey(
+            \OneInterface::class,
+            $classes
+        );
+        self::assertContains(
+            $classes[\Framework\Debug\Debugger::class],
+            $packageFiles
+        );
+        self::assertContains(
+            $classes[\Framework\Debug\Debugger::class],
+            $files
         );
     }
 
-    public function testIsPreloadable() : void
+    public function testPackagesDir() : void
     {
-        self::assertTrue($this->preloader->isPreloadable('Framework\Database\Foo'));
-        self::assertTrue($this->preloader->isPreloadable('Framework\HTTP\Foo'));
-        self::assertFalse($this->preloader->isPreloadable('Framework\CodingStandard\Foo'));
-        self::assertFalse($this->preloader->isPreloadable('Framework\Testing\Foo'));
-        self::assertFalse($this->preloader->isPreloadable('Other'));
+        $dir = __DIR__ . '/../vendor/aplus';
+        $preloader = new Preloader(packagesDir: null);
+        $preloader->setPackagesDir($dir);
+        self::assertSame(
+            \realpath($dir) . \DIRECTORY_SEPARATOR,
+            $preloader->getPackagesDir()
+        );
+        self::assertEmpty($preloader->listFiles());
+        self::assertNotEmpty($preloader->withPackages()->listFiles());
+        $classes = $preloader->getAutoloader()->getClasses();
+        self::assertContains(
+            $classes[\Framework\Debug\Debugger::class],
+            $preloader->listFiles()
+        );
+        self::assertArrayNotHasKey(
+            \Framework\CodingStandard\Config::class,
+            $classes
+        );
+        $preloader->withDevPackages()->listFiles();
+        $classes = $preloader->getAutoloader()->getClasses();
+        self::assertArrayHasKey(
+            \Framework\CodingStandard\Config::class,
+            $classes
+        );
+        self::assertContains(
+            $classes[\Framework\CodingStandard\Config::class],
+            $preloader->withDevPackages()->listFiles()
+        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid packages dir: /foo/bar');
+        $preloader->setPackagesDir('/foo/bar');
     }
 
-    public function testLoader() : void
+    public function testLoad() : void
     {
-        $className = 'Framework\Helpers\ArraySimple';
-        $filepath = \realpath($this->preloader->packagesDir . 'helpers/src/ArraySimple.php');
-        self::assertFalse(\class_exists($className, false));
-        self::assertNotContains($className, $this->preloader::getDeclarations());
-        self::assertNotContains($filepath, $this->preloader::getIncludedFiles());
-        $this->preloader->load();
-        self::assertTrue(\class_exists($className, false));
-        self::assertContains($className, $this->preloader::getDeclarations());
-        self::assertContains($filepath, $this->preloader::getIncludedFiles());
-        self::assertNotContains(Config::class, $this->preloader::getDeclarations());
+        $preloader = new Preloader(packagesDir: __DIR__ . '/support');
+        self::assertEmpty($preloader->load());
+        $preloader->getAutoloader()->setClass(\OneClass::class, __DIR__ . '/support/OneClass.php');
+        self::assertContains(
+            __DIR__ . '/support/OneClass.php',
+            $preloader->load()
+        );
     }
 
-    public function testDoNotLoadExternals() : void
+    public function testAllDeclarations() : void
     {
-        $filepath = $this->preloader->packagesDir . 'helpers/src/Foo.php';
-        \file_put_contents($filepath, '<?php class Foo{}');
-        self::assertTrue(\is_file($filepath));
-        $this->preloader->load();
-        self::assertNotContains('Foo', $this->preloader::getAllDeclarations());
-        \unlink($filepath);
+        self::assertContains(
+            __CLASS__,
+            Preloader::getAllDeclarations()
+        );
+        self::assertContains(
+            Preloader::class,
+            Preloader::getAllDeclarations()
+        );
+    }
+
+    public function testDeclarations() : void
+    {
+        self::assertNotContains(
+            __CLASS__,
+            Preloader::getDeclarations()
+        );
+        self::assertContains(
+            Preloader::class,
+            Preloader::getAllDeclarations()
+        );
+    }
+
+    public function testIncludedFiles() : void
+    {
+        self::assertContains(
+            __FILE__,
+            Preloader::getIncludedFiles()
+        );
     }
 }
