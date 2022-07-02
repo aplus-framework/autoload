@@ -73,7 +73,11 @@ class Locator
             ], true)) {
                 for ($next = $current + 1; $next < $last; $next++) {
                     if ($tokens[$next] === '{') {
-                        $class = $namespace . '\\' . $tokens[$current + 2][1];
+                        $token = $tokens[$current + 2];
+                        if ( ! isset($token[1])) {
+                            return null;
+                        }
+                        $class = $namespace . '\\' . $token[1];
                         break 2;
                     }
                 }

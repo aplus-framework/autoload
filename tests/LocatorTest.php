@@ -40,6 +40,7 @@ class LocatorTest extends TestCase
             __DIR__ . '/support/OneEnum.php',
             __DIR__ . '/support/OneInterface.php',
             __DIR__ . '/support/OneTrait.php',
+            __DIR__ . '/support/ReturnObject.php',
             __DIR__ . '/support/foo.txt',
         ];
     }
@@ -61,6 +62,7 @@ class LocatorTest extends TestCase
             $this->locator->getClassName(__DIR__ . '/support/NamespacedClass.php')
         );
         $this->assertNull($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));
+        $this->assertNull($this->locator->getClassName(__DIR__ . '/support/ReturnObject.php'));
         $this->assertEquals(
             'OneClass',
             $this->locator->getClassName(__DIR__ . '/support/OneClass.php')
