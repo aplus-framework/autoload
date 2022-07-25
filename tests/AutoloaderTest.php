@@ -23,26 +23,26 @@ class AutoloaderTest extends TestCase
 
     public function testNamespaces() : void
     {
-        $this->assertEmpty($this->autoloader->getNamespaces());
+        self::assertEmpty($this->autoloader->getNamespaces());
         $this->autoloader->setNamespaces([
             'Foo\Bar\\' => [__DIR__, __DIR__],
             'Tests' => __DIR__,
         ]);
         $dir = __DIR__ . \DIRECTORY_SEPARATOR;
-        $this->assertEquals([$dir], $this->autoloader->getNamespace('Tests'));
-        $this->assertEmpty($this->autoloader->getNamespace('Testss'));
-        $this->assertEquals([
+        self::assertEquals([$dir], $this->autoloader->getNamespace('Tests'));
+        self::assertEmpty($this->autoloader->getNamespace('Testss'));
+        self::assertEquals([
             'Tests' => [$dir],
             'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->removeNamespaces(['Tests']);
-        $this->assertEquals([
+        self::assertEquals([
             'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->addNamespaces([
             '\Foo\Bar' => [__DIR__],
         ]);
-        $this->assertEquals([
+        self::assertEquals([
             'Foo\Bar' => [$dir, $dir, $dir],
         ], $this->autoloader->getNamespaces());
     }
@@ -53,7 +53,7 @@ class AutoloaderTest extends TestCase
             '\\' . __CLASS__ => __FILE__,
             '\Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
         ]);
-        $this->assertEquals(
+        self::assertEquals(
             [
                 __CLASS__ => __FILE__,
                 'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
@@ -61,7 +61,7 @@ class AutoloaderTest extends TestCase
             $this->autoloader->getClasses()
         );
         $this->autoloader->removeClasses([__CLASS__]);
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
             ],
@@ -71,18 +71,18 @@ class AutoloaderTest extends TestCase
 
     public function testFindClassPath() : void
     {
-        $this->assertNull($this->autoloader->findClassPath(__CLASS__));
+        self::assertNull($this->autoloader->findClassPath(__CLASS__));
         $this->autoloader->setNamespace(__NAMESPACE__, __DIR__);
-        $this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+        self::assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
         $this->autoloader->setClass(__CLASS__, __FILE__);
-        $this->assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+        self::assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
     }
 
     public function testLoadClass() : void
     {
-        $this->assertFalse($this->autoloader->loadClass('Foo\NamespacedClass'));
+        self::assertFalse($this->autoloader->loadClass('Foo\NamespacedClass'));
         $this->autoloader->setNamespace('Foo', __DIR__ . '/support');
-        $this->assertTrue($this->autoloader->loadClass('Foo\NamespacedClass'));
+        self::assertTrue($this->autoloader->loadClass('Foo\NamespacedClass'));
     }
 
     public function testPathIsNotFile() : void
@@ -102,7 +102,7 @@ class AutoloaderTest extends TestCase
     public function testNewClass() : void
     {
         $this->autoloader->setNamespace('Foo\NamespacedClass', __DIR__ . '/support');
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             \Foo\NamespacedClass::class,
             new \Foo\NamespacedClass()
         );
@@ -110,6 +110,6 @@ class AutoloaderTest extends TestCase
 
     public function testUnregister() : void
     {
-        $this->assertTrue($this->autoloader->unregister());
+        self::assertTrue($this->autoloader->unregister());
     }
 }
