@@ -49,33 +49,33 @@ class LocatorTest extends TestCase
     {
         self::assertNull($this->locator->listFiles(__DIR__ . '/unknown'));
         $list = $this->getFiles();
-        self::assertEquals($list, $this->locator->listFiles(__DIR__));
-        self::assertEquals($list, $this->locator->listFiles(__DIR__ . '/../tests'));
+        self::assertSame($list, $this->locator->listFiles(__DIR__));
+        self::assertSame($list, $this->locator->listFiles(__DIR__ . '/../tests'));
     }
 
     public function testGetClass() : void
     {
-        self::assertEquals(__CLASS__, $this->locator->getClassName(__FILE__));
+        self::assertSame(__CLASS__, $this->locator->getClassName(__FILE__));
         self::assertNull($this->locator->getClassName(__DIR__ . '/unknown'));
-        self::assertEquals(
+        self::assertSame(
             'Foo\NamespacedClass',
             $this->locator->getClassName(__DIR__ . '/support/NamespacedClass.php')
         );
         self::assertNull($this->locator->getClassName(__DIR__ . '/support/NoClass.php'));
         self::assertNull($this->locator->getClassName(__DIR__ . '/support/ReturnObject.php'));
-        self::assertEquals(
+        self::assertSame(
             'OneClass',
             $this->locator->getClassName(__DIR__ . '/support/OneClass.php')
         );
-        self::assertEquals(
+        self::assertSame(
             'OneInterface',
             $this->locator->getClassName(__DIR__ . '/support/OneInterface.php')
         );
-        self::assertEquals(
+        self::assertSame(
             'Foo\Bar\Baz\OneTrait',
             $this->locator->getClassName(__DIR__ . '/support/OneTrait.php')
         );
-        self::assertEquals(
+        self::assertSame(
             'Foo\Bar\Baz\OneEnum',
             $this->locator->getClassName(__DIR__ . '/support/OneEnum.php')
         );
@@ -84,7 +84,7 @@ class LocatorTest extends TestCase
     public function testGetFiles() : void
     {
         $this->autoloader->setNamespace('Autoload', __DIR__ . '/..');
-        self::assertEquals(
+        self::assertSame(
             $this->getFiles(),
             $this->locator->getFiles('tests')
         );
@@ -93,13 +93,13 @@ class LocatorTest extends TestCase
     public function testFindFiles() : void
     {
         $this->autoloader->setNamespace('Tests', __DIR__);
-        self::assertEquals(
+        self::assertSame(
             [
                 __DIR__ . '/LocatorTest.php',
             ],
             $this->locator->findFiles('LocatorTest')
         );
-        self::assertEquals(
+        self::assertSame(
             [
                 __DIR__ . '/LocatorTest.php',
             ],
@@ -113,12 +113,12 @@ class LocatorTest extends TestCase
     public function testNamespacedFilepath() : void
     {
         $this->autoloader->setNamespace('Tests\Foo', __DIR__);
-        self::assertEquals(
+        self::assertSame(
             __FILE__,
             $this->locator->getNamespacedFilepath('Tests/Foo/LocatorTest')
         );
         $this->autoloader->setNamespace('Tests', __DIR__);
-        self::assertEquals(
+        self::assertSame(
             __FILE__,
             $this->locator->getNamespacedFilepath('Tests/LocatorTest')
         );

@@ -29,20 +29,20 @@ class AutoloaderTest extends TestCase
             'Tests' => __DIR__,
         ]);
         $dir = __DIR__ . \DIRECTORY_SEPARATOR;
-        self::assertEquals([$dir], $this->autoloader->getNamespace('Tests'));
+        self::assertSame([$dir], $this->autoloader->getNamespace('Tests'));
         self::assertEmpty($this->autoloader->getNamespace('Testss'));
-        self::assertEquals([
+        self::assertSame([
             'Tests' => [$dir],
             'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->removeNamespaces(['Tests']);
-        self::assertEquals([
+        self::assertSame([
             'Foo\Bar' => [$dir, $dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->addNamespaces([
             '\Foo\Bar' => [__DIR__],
         ]);
-        self::assertEquals([
+        self::assertSame([
             'Foo\Bar' => [$dir, $dir, $dir],
         ], $this->autoloader->getNamespaces());
     }
@@ -53,7 +53,7 @@ class AutoloaderTest extends TestCase
             '\\' . __CLASS__ => __FILE__,
             '\Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
         ]);
-        self::assertEquals(
+        self::assertSame(
             [
                 __CLASS__ => __FILE__,
                 'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
@@ -61,7 +61,7 @@ class AutoloaderTest extends TestCase
             $this->autoloader->getClasses()
         );
         $this->autoloader->removeClasses([__CLASS__]);
-        self::assertEquals(
+        self::assertSame(
             [
                 'Tests\LocatorTest' => __DIR__ . '/LocatorTest.php',
             ],
@@ -73,9 +73,9 @@ class AutoloaderTest extends TestCase
     {
         self::assertNull($this->autoloader->findClassPath(__CLASS__));
         $this->autoloader->setNamespace(__NAMESPACE__, __DIR__);
-        self::assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+        self::assertSame(__FILE__, $this->autoloader->findClassPath(__CLASS__));
         $this->autoloader->setClass(__CLASS__, __FILE__);
-        self::assertEquals(__FILE__, $this->autoloader->findClassPath(__CLASS__));
+        self::assertSame(__FILE__, $this->autoloader->findClassPath(__CLASS__));
     }
 
     public function testLoadClass() : void
