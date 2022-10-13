@@ -65,6 +65,9 @@ class Locator
                 }
                 continue;
             }
+            if ($token[0] === \T_RETURN) {
+                return null;
+            }
             if (\in_array($token[0], [
                 \T_CLASS,
                 \T_ENUM,
@@ -74,9 +77,6 @@ class Locator
                 for ($next = $current + 1; $next < $last; $next++) {
                     if ($tokens[$next] === '{') {
                         $token = $tokens[$current + 2];
-                        if ( ! isset($token[1])) {
-                            return null;
-                        }
                         $class = $namespace . '\\' . $token[1];
                         break 2;
                     }
