@@ -49,7 +49,7 @@ whenever you want through the ``register`` method:
 
 .. code-block:: php
 
-    $autoloader->register();
+    $autoloader->register(); // bool
 
 Once this is done, the classes registered in the Autoloader can be automatically
 loaded.
@@ -67,7 +67,7 @@ Set Class
 
     $name = 'App';
     $filepath = __DIR__ . '/App.php';
-    $autoloader->setClass($name, $filepath);
+    $autoloader->setClass($name, $filepath); // static
 
 Set Classes
 ***********
@@ -80,7 +80,7 @@ Or, register multiple classes at once with ``setClasses``:
         'App' => __DIR__ . '/App.php',
         'Config' => __DIR__ . '/Config.php',
     ];
-    $autoloader->setClasses($classes);
+    $autoloader->setClasses($classes); // static
 
 Get Class
 *********
@@ -109,7 +109,7 @@ If you need to remove a class from the Autoloader, use the ``removeClass`` metho
 .. code-block:: php
 
     $name = 'App';
-    $autoloader->removeClass($name);
+    $autoloader->removeClass($name); // static
 
 Remove Classes
 **************
@@ -122,7 +122,7 @@ Or ``removeClasses`` to remove multiple classes at once:
         'App',
         'Config',
     ];
-    $autoloader->removeClasses($names);
+    $autoloader->removeClasses($names); // static
 
 Autoload with Namespaces
 ########################
@@ -145,7 +145,7 @@ Let's see how to add namespaces in Autoloader:
 
     $namespace = 'App';
     $directory = __DIR__ . '/app';
-    $autoloader->addNamespace($namespace, $directory);
+    $autoloader->addNamespace($namespace, $directory); // static
 
 This causes Autoloader to look for classes starting with the ``App`` namespace
 within the ``__DIR__ . '/app'`` directory.
@@ -158,7 +158,7 @@ all others. For this, use the ``setNamespace`` method:
 
 .. code-block:: php
 
-    $autoloader->setNamespace($namespace, $directory);
+    $autoloader->setNamespace($namespace, $directory); // static
 
 Get Namespace
 *************
@@ -187,7 +187,7 @@ Let's see how to set a directory for the **App** namespace and another for
     $autoloader->setNamespaces([
         'App' => __DIR__ . '/app',
         'Config' => __DIR__ . '/config',
-    ]);
+    ]); // static
 
 Get Namespaces
 **************
@@ -205,7 +205,7 @@ If necessary, a namespace can be removed as in the example below:
 
 .. code-block:: php
 
-    $autoloader->removeNamespace('App');
+    $autoloader->removeNamespace('App'); // static
 
 Remove Namespaces
 *****************
@@ -217,7 +217,7 @@ Or remove multiple at once:
     $autoloader->removeNamespaces([
         'App',
         'Config',
-    ]);
+    ]); // static
 
 Find Class Path
 ***************
@@ -302,7 +302,7 @@ To find all files with the same name within all namespaces we can use the
 .. code-block:: php
 
     $file = 'Foo';
-    $files = $locator->findFiles($filename, '.php'); // string or null
+    $files = $locator->findFiles($filename, '.php'); // array of strings
 
 Get Files
 *********
@@ -313,7 +313,7 @@ To get a list of all files within a subdirectory within namespaces we can use th
 .. code-block:: php
 
     $subDirectory = 'tests';
-    $files = $locator->getFiles($subDirectory, '.php'); // string or null
+    $files = $locator->getFiles($subDirectory, '.php'); // array of strings
 
 List Files
 **********
@@ -324,7 +324,7 @@ To list absolutely all the files inside a directory, we can use the
 .. code-block:: php
 
     $directory = 'tests';
-    $files = $locator->listFiles($directory); // array or null
+    $files = $locator->listFiles($directory); // array of strings or null
 
 Preloader
 ---------
@@ -348,7 +348,7 @@ To load the Aplus Framework class files, create a file like **preload.php**:
     use Framework\Autoload\Preloader;
 
     $preloader = new Preloader();
-    $preloader->load();
+    $preloader->load(); // array of strings
 
 Then, edit the PHP-FPM **php.ini** file by setting the preload file path and,
 if necessary, the user:
@@ -374,10 +374,10 @@ That way you can add classes that don't belong to the Framework.
     use Framework\Autoload\Preloader;
 
     $autoloader = new Autoloader();
-    $autoloader->addNamespace('Foo', __DIR__ . '/foo');
+    $autoloader->addNamespace('Foo', __DIR__ . '/foo'); // static
 
     $preloader = new Preloader($autoloader);
-    $preloader->load();
+    $preloader->load(); // array of strings
 
 Packages
 ########
@@ -425,7 +425,7 @@ the method ``setPackagesDir``...
 .. code-block:: php
 
     $directory = __DIR__ . '/aplus';
-    $preloader->setPackagesDir($directory);
+    $preloader->setPackagesDir($directory); // static
 
 With Packages
 *************
@@ -477,7 +477,7 @@ To load files into OPCache Preloading, just call the ``load`` method.
 
 .. code-block:: php
 
-    $files = $preloader->load();
+    $files = $preloader->load(); // array of strings
 
 It will load all files from `List Files`_ into memory.
 
