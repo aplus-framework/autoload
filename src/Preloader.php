@@ -77,7 +77,7 @@ class Preloader
     public function setPackagesDir(string $packagesDir) : static
     {
         $realpath = \realpath($packagesDir);
-        if ( ! $realpath || ! \is_dir($packagesDir)) {
+        if (!$realpath || !\is_dir($packagesDir)) {
             throw new InvalidArgumentException('Invalid packages dir: ' . $packagesDir);
         }
         $this->packagesDir = $realpath . \DIRECTORY_SEPARATOR;
@@ -110,16 +110,16 @@ class Preloader
     {
         $result = [];
         foreach ($this->getLocator()->listFiles($this->getPackagesDir()) as $file) {
-            if ( ! \str_ends_with($file, '.php')) {
+            if (!\str_ends_with($file, '.php')) {
                 continue;
             }
             $className = $this->getLocator()->getClassName($file);
-            if ( ! $className
-                || ($className !== 'Aplus' && ! \str_starts_with($className, 'Framework\\'))
+            if (!$className
+                || ($className !== 'Aplus' && !\str_starts_with($className, 'Framework\\'))
             ) {
                 continue;
             }
-            if ( ! $this->loadDevPackages && $this->isDevelopmentClass($className)) {
+            if (!$this->loadDevPackages && $this->isDevelopmentClass($className)) {
                 continue;
             }
             if ($setClasses) {
@@ -152,12 +152,12 @@ class Preloader
             foreach ($directories as $directory) {
                 $files = $this->getLocator()->listFiles($directory);
                 foreach ($files as $file) {
-                    if ( ! \str_ends_with($file, '.php')) {
+                    if (!\str_ends_with($file, '.php')) {
                         continue;
                     }
                     $className = $this->getLocator()->getClassName($file);
-                    if ( ! $className
-                        || ! \str_starts_with($className, $namespace . '\\')
+                    if (!$className
+                        || !\str_starts_with($className, $namespace . '\\')
                     ) {
                         continue;
                     }

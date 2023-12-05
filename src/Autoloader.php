@@ -442,7 +442,7 @@ class Autoloader
     protected function renderFilePath(string $path) : string
     {
         $real = \realpath($path);
-        if ($real === false || ! \is_file($real)) {
+        if ($real === false || !\is_file($real)) {
             throw new RuntimeException("Path is not a file: {$path}");
         }
         return $real;
@@ -460,7 +460,7 @@ class Autoloader
     protected function renderDirectoryPath(string $path) : string
     {
         $real = \realpath($path);
-        if ($real === false || ! \is_dir($real)) {
+        if ($real === false || !\is_dir($real)) {
             throw new RuntimeException("Path is not a directory: {$path}");
         }
         return $real . \DIRECTORY_SEPARATOR;

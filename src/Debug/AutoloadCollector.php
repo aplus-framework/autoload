@@ -147,7 +147,7 @@ class AutoloadCollector extends Collector
 
     protected function renderAutoloader() : string
     {
-        if ( ! isset($this->autoloader)) {
+        if (!isset($this->autoloader)) {
             return '<p>An Autoloader instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
@@ -227,10 +227,10 @@ class AutoloadCollector extends Collector
         if ($conf === null) {
             return '<p>Preload is not available.</p>';
         }
-        if ($conf && ! empty($conf['directives']['opcache.preload'])) {
+        if ($conf && !empty($conf['directives']['opcache.preload'])) {
             $result = '<p><strong>File:</strong> '
                 . \htmlentities($conf['directives']['opcache.preload']) . '</p>';
-            if ( ! empty($conf['directives']['opcache.preload_user'])) {
+            if (!empty($conf['directives']['opcache.preload_user'])) {
                 $result .= '<p><strong>User:</strong> '
                     . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
             }

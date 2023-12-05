@@ -47,7 +47,7 @@ class Locator
      */
     public function getClassName(string $filename) : ?string
     {
-        if ( ! \is_file($filename)) {
+        if (!\is_file($filename)) {
             return null;
         }
         $tokens = \token_get_all((string) \file_get_contents($filename));
@@ -110,7 +110,7 @@ class Locator
             $namespace .= $namespace === ''
                 ? \array_shift($segments)
                 : '\\' . \array_shift($segments);
-            if ( ! isset($namespaces[$namespace])) {
+            if (!isset($namespaces[$namespace])) {
                 continue;
             }
             foreach ($namespaces[$namespace] as $directory) {
@@ -130,7 +130,7 @@ class Locator
     #[Pure]
     protected function ensureExtension(string $filename, string $extension) : string
     {
-        if ( ! \str_ends_with($filename, $extension)) {
+        if (!\str_ends_with($filename, $extension)) {
             $filename .= $extension;
         }
         return $filename;
