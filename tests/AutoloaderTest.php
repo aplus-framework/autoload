@@ -12,7 +12,7 @@ namespace Tests\Autoload;
 use Framework\Autoload\Autoloader;
 use PHPUnit\Framework\TestCase;
 
-class AutoloaderTest extends TestCase
+final class AutoloaderTest extends TestCase
 {
     protected Autoloader $autoloader;
 

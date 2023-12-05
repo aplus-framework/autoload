@@ -13,7 +13,7 @@ use Framework\Autoload\Autoloader;
 use Framework\Autoload\Debug\AutoloadCollector;
 use PHPUnit\Framework\TestCase;
 
-class AutoloadCollectorTest extends TestCase
+final class AutoloadCollectorTest extends TestCase
 {
     protected AutoloadCollector $collector;
     protected Autoloader $autoloader;

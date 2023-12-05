@@ -13,7 +13,7 @@ use Framework\Autoload\Autoloader;
 use Framework\Autoload\Locator;
 use PHPUnit\Framework\TestCase;
 
-class LocatorTest extends TestCase
+final class LocatorTest extends TestCase
 {
     protected Autoloader $autoloader;
     protected Locator $locator;
