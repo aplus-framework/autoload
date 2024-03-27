@@ -31,6 +31,7 @@ final class LocatorTest extends TestCase
     {
         return [
             __DIR__ . '/AutoloaderTest.php',
+            __DIR__ . '/Debug/AutoloadCollectionTest.php',
             __DIR__ . '/Debug/AutoloadCollectorTest.php',
             __FILE__,
             __DIR__ . '/PreloaderTest.php',
