@@ -133,8 +133,8 @@ class Preloader
 
     protected function isDevelopmentClass(string $className) : bool
     {
-        return \str_starts_with($className, 'Framework\\CodingStandard\\')
-            || \str_starts_with($className, 'Framework\\Testing\\');
+        return \str_starts_with($className, 'Framework\CodingStandard\\')
+            || \str_starts_with($className, 'Framework\Testing\\');
     }
 
     /**
