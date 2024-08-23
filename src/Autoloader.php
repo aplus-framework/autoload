@@ -387,7 +387,7 @@ class Autoloader
         return $loaded;
     }
 
-    public function setDebugCollector(AutoloadCollector $debugCollector = null, string $name = 'default') : static
+    public function setDebugCollector(?AutoloadCollector $debugCollector = null, string $name = 'default') : static
     {
         if ($debugCollector) {
             $this->debugCollector = $debugCollector;

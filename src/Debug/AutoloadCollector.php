@@ -242,7 +242,7 @@ class AutoloadCollector extends Collector
     /**
      * @return array<string,mixed>|null
      */
-    protected function getOpcacheConfiguration() : array | null
+    protected function getOpcacheConfiguration() : ?array
     {
         return \function_exists('opcache_get_configuration')
             ? (array) \opcache_get_configuration()

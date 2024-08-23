@@ -53,7 +53,7 @@ class Preloader
      * null to disable packages loading
      */
     public function __construct(
-        Autoloader $autoloader = null,
+        ?Autoloader $autoloader = null,
         ?string $packagesDir = __DIR__ . '/../../'
     ) {
         $this->loadPackages = $packagesDir !== null;
