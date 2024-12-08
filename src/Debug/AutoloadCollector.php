@@ -12,6 +12,7 @@ namespace Framework\Autoload\Debug;
 use Framework\Autoload\Autoloader;
 use Framework\Autoload\Preloader;
 use Framework\Debug\Collector;
+use Framework\Debug\Debugger;
 use UnitEnum;
 
 /**
@@ -81,8 +82,14 @@ class AutoloadCollector extends Collector
         <?= $this->renderPreload() ?>
         <h1>Declarations</h1>
         <?php
-        $declarations = Preloader::getAllDeclarations(); ?>
-        <p>Total of <?= \count($declarations) ?> declarations.</p>
+        $declarations = Preloader::getAllDeclarations();
+        $classes = $this->getPreloadStatistics()['classes'] ?? [];
+        ?>
+        <p>Total of <?= \count($declarations) ?> declarations.
+            <?php if ($classes): ?>
+                <span style="color: green"><?= \count($classes) ?> are preloaded.</span>
+            <?php endif ?>
+        </p>
         <table>
             <thead>
             <tr>
@@ -94,6 +101,9 @@ class AutoloadCollector extends Collector
             </tr>
             </thead>
             <tbody>
+            <?php
+            $count = 0;
+            ?>
             <?php foreach ($declarations as $index => $declaration): ?>
                 <?php
                 $data = $this->getDataByDeclaration($declaration); ?>
@@ -101,7 +111,14 @@ class AutoloadCollector extends Collector
                     : '' ?>>
                     <td><?= $index + 1 ?></td>
                     <td><?= $this->getDeclarationType($declaration) ?></td>
-                    <td><?= $declaration ?></td>
+                    <td<?= \in_array($declaration, $classes)
+                        ? ' style="color: green" title="' . (\MessageFormatter::formatMessage(
+                            'en',
+                            '{number, ordinal}',
+                            ['number' => ++$count]
+                        )) . ' preloaded"' : '' ?>>
+                        <?= $declaration ?>
+                    </td>
                     <td><?php
                         if ($data && isset($data['loaded'])) {
                             echo $data['loaded'] ? 'Yes' : 'No';
@@ -234,6 +251,7 @@ class AutoloadCollector extends Collector
                 $result .= '<p><strong>User:</strong> '
                     . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
             }
+            $result .= $this->renderPreloadStatistics();
             return $result;
         }
         return '<p>Preload file has not been set.</p>';
@@ -247,6 +265,41 @@ class AutoloadCollector extends Collector
         return \function_exists('opcache_get_configuration')
             ? (array) \opcache_get_configuration()
             : null;
+    }
+
+    protected function renderPreloadStatistics() : string
+    {
+        $result = '';
+        $statistics = $this->getPreloadStatistics();
+        if ($statistics) {
+            $memory = Debugger::convertSize($statistics['memory_consumption']);
+            $classes = $statistics['classes'];
+            $result .= '<p><strong>Memory:</strong> ' . $memory . '</p>';
+            $result .= '<p><strong>Classes:</strong> ' . \count($classes) . '</p>';
+        }
+        return $result;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    protected function getPreloadStatistics() : array
+    {
+        $statistics = [];
+        if (\function_exists('opcache_get_status')) {
+            $status = (array) \opcache_get_status();
+            $statistics = $status['preload_statistics'] ?? [];
+        }
+        if (empty($statistics) && \defined('IS_TESTING') && IS_TESTING) {
+            $statistics = [
+                'memory_consumption' => 500000,
+                'classes' => [
+                    'Foo',
+                    'Bar',
+                ],
+            ];
+        }
+        return $statistics;
     }
 
     protected function getDeclarationType(string $declaration) : string
