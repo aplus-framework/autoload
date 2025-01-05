@@ -61,7 +61,7 @@ class AutoloadCollector extends Collector
             <tr>
                 <th>#</th>
                 <th>File</th>
-                <th title="Seconds">Time</th>
+                <th title="Milliseconds">Time</th>
             </tr>
             </thead>
             <tbody>
@@ -73,7 +73,7 @@ class AutoloadCollector extends Collector
                     : '' ?>>
                     <td><?= $index + 1 ?></td>
                     <td><?= \htmlentities($file) ?></td>
-                    <td><?= $data ? \round($data['end'] - $data['start'], 6) : '' ?></td>
+                    <td><?= $data ? Debugger::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
@@ -97,7 +97,7 @@ class AutoloadCollector extends Collector
                 <th>Type</th>
                 <th>Declaration</th>
                 <th title="Loaded with the current Autoloader">Loaded</th>
-                <th title="Seconds">Time</th>
+                <th title="Milliseconds">Time</th>
             </tr>
             </thead>
             <tbody>
@@ -123,7 +123,7 @@ class AutoloadCollector extends Collector
                         if ($data && isset($data['loaded'])) {
                             echo $data['loaded'] ? 'Yes' : 'No';
                         } ?></td>
-                    <td><?= $data ? \round($data['end'] - $data['start'], 6) : '' ?></td>
+                    <td><?= $data ? Debugger::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
