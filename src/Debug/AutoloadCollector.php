@@ -87,7 +87,7 @@ class AutoloadCollector extends Collector
         ?>
         <p>Total of <?= \count($declarations) ?> declarations.
             <?php if ($classes): ?>
-                <span style="color: green"><?= \count($classes) ?> are preloaded.</span>
+                <span class="text-success"><?= \count($classes) ?> are preloaded.</span>
             <?php endif ?>
         </p>
         <table>
@@ -112,7 +112,7 @@ class AutoloadCollector extends Collector
                     <td><?= $index + 1 ?></td>
                     <td><?= $this->getDeclarationType($declaration) ?></td>
                     <td<?= \in_array($declaration, $classes)
-                        ? ' style="color: green" title="' . (\MessageFormatter::formatMessage(
+                        ? ' class="text-success" title="' . (\MessageFormatter::formatMessage(
                             'en',
                             '{number, ordinal}',
                             ['number' => ++$count]
