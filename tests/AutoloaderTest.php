@@ -24,26 +24,26 @@ final class AutoloaderTest extends TestCase
     public function testNamespaces() : void
     {
         self::assertEmpty($this->autoloader->getNamespaces());
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR;
         $this->autoloader->setNamespaces([
             'Foo\Bar\\' => [__DIR__, __DIR__],
             'Tests' => __DIR__,
         ]);
-        $dir = __DIR__ . \DIRECTORY_SEPARATOR;
         self::assertSame([$dir], $this->autoloader->getNamespace('Tests'));
         self::assertEmpty($this->autoloader->getNamespace('Testss'));
         self::assertSame([
             'Tests' => [$dir],
-            'Foo\Bar' => [$dir, $dir],
+            'Foo\Bar' => [$dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->removeNamespaces(['Tests']);
         self::assertSame([
-            'Foo\Bar' => [$dir, $dir],
+            'Foo\Bar' => [$dir],
         ], $this->autoloader->getNamespaces());
         $this->autoloader->addNamespaces([
-            '\Foo\Bar' => [__DIR__],
+            '\Foo\Bar' => [__DIR__ . '/support', __DIR__ . '/Debug'],
         ]);
         self::assertSame([
-            'Foo\Bar' => [$dir, $dir, $dir],
+            'Foo\Bar' => [$dir, __DIR__ . '/support/', __DIR__ . '/Debug/'],
         ], $this->autoloader->getNamespaces());
     }
 

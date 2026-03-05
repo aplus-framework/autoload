@@ -96,10 +96,22 @@ class Autoloader
     {
         $directories = $this->makeRenderedDirectoryPaths((array) $dir);
         if ($directories) {
+            $directories = $this->makeUniqueValues($directories);
             $this->namespaces[$this->renderRealName($namespace)] = $directories;
             $this->sortNamespaces();
         }
         return $this;
+    }
+
+    /**
+     * @param array<mixed> $values
+     *
+     * @return array<int,string>
+     */
+    protected function makeUniqueValues(array $values) : array
+    {
+        $values = \array_unique($values);
+        return \array_values($values);
     }
 
     /**
@@ -132,6 +144,7 @@ class Autoloader
             if (isset($this->namespaces[$name])) {
                 $directories = [...$this->namespaces[$name], ...$directories];
             }
+            $directories = $this->makeUniqueValues($directories);
             $this->namespaces[$name] = $directories;
             $this->sortNamespaces();
         }
