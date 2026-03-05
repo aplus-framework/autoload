@@ -36,7 +36,7 @@ class Locator
     /**
      * Gets the first Qualified Class Name in a given filename.
      *
-     * The "class name" can be the name of a class, an interface or a trait.
+     * The "class name" can be the name of a class, an interface, a trait or enum.
      *
      * @param string $filename
      *
