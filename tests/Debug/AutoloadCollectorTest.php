@@ -75,7 +75,8 @@ final class AutoloadCollectorTest extends TestCase
         $this->autoloader->setNamespace('Foo\Bar\Baz', __DIR__ . '/../support');
         $this->autoloader->setClass('OneClass', __DIR__ . '/../support/OneClass.php');
         $class1 = new \OneClass();
-        $class2 = new class() {
+        $class2 = new class()
+        {
             use \Foo\Bar\Baz\OneTrait;
         };
         $contents = $this->collector->getContents();
@@ -102,7 +103,8 @@ final class AutoloadCollectorTest extends TestCase
 
     public function testPreload() : void
     {
-        $collector = new class() extends AutoloadCollector {
+        $collector = new class() extends AutoloadCollector
+        {
             protected function getOpcacheConfiguration() : ?array
             {
                 return [
@@ -121,7 +123,8 @@ final class AutoloadCollectorTest extends TestCase
 
     public function testPreloadNotAvailable() : void
     {
-        $collector = new class() extends AutoloadCollector {
+        $collector = new class() extends AutoloadCollector
+        {
             protected function getOpcacheConfiguration() : ?array
             {
                 return null;
@@ -136,7 +139,8 @@ final class AutoloadCollectorTest extends TestCase
 
     public function testPreloadNotSet() : void
     {
-        $collector = new class() extends AutoloadCollector {
+        $collector = new class() extends AutoloadCollector
+        {
             protected function getOpcacheConfiguration() : ?array
             {
                 return [];
@@ -151,7 +155,8 @@ final class AutoloadCollectorTest extends TestCase
 
     public function testDeclarationNotFound() : void
     {
-        $collector = new class() extends AutoloadCollector {
+        $collector = new class() extends AutoloadCollector
+        {
             public function getDeclarationType(string $declaration) : string
             {
                 return parent::getDeclarationType($declaration);
