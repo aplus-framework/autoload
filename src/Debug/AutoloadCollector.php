@@ -207,7 +207,7 @@ class AutoloadCollector extends Collector
             </tbody>
         </table>
         <?php
-        return \ob_get_clean(); // @phpstan-ignore-line
+        return \ob_get_clean();
     }
 
     protected function renderClasses() : string
@@ -235,7 +235,7 @@ class AutoloadCollector extends Collector
             </tbody>
         </table>
         <?php
-        return \ob_get_clean(); // @phpstan-ignore-line
+        return \ob_get_clean();
     }
 
     protected function renderPreload() : string
@@ -258,7 +258,7 @@ class AutoloadCollector extends Collector
     }
 
     /**
-     * @return array<string,mixed>|null
+     * @return array<mixed>|null
      */
     protected function getOpcacheConfiguration() : ?array
     {
