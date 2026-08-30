@@ -12,7 +12,7 @@ namespace Framework\Autoload\Debug;
 use Framework\Autoload\Autoloader;
 use Framework\Autoload\Preloader;
 use Framework\Debug\Collector;
-use Framework\Debug\Debugger;
+use Framework\Debug\Debugger as D;
 use UnitEnum;
 
 /**
@@ -72,8 +72,8 @@ class AutoloadCollector extends Collector
                     ? ' class="active" title="Included with the current Autoloader"'
                     : '' ?>>
                     <td><?= $index + 1 ?></td>
-                    <td><?= \htmlentities($file) ?></td>
-                    <td><?= $data ? Debugger::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
+                    <td><?= D::esc($file) ?></td>
+                    <td><?= $data ? D::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
@@ -123,7 +123,7 @@ class AutoloadCollector extends Collector
                         if ($data && isset($data['loaded'])) {
                             echo $data['loaded'] ? 'Yes' : 'No';
                         } ?></td>
-                    <td><?= $data ? Debugger::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
+                    <td><?= $data ? D::roundSecondsToMilliseconds($data['end'] - $data['start']) : '' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
@@ -195,12 +195,12 @@ class AutoloadCollector extends Collector
             <?php foreach ($namespaces as $namespace => $directories): ?>
                 <?php $count = \count($directories); ?>
                 <tr>
-                    <td rowspan="<?= $count ?>"><?= \htmlentities($namespace) ?></td>
-                    <td><?= \htmlentities($directories[0]) ?></td>
+                    <td rowspan="<?= $count ?>"><?= D::esc($namespace) ?></td>
+                    <td><?= D::esc($directories[0]) ?></td>
                 </tr>
                 <?php for ($i = 1; $i < $count; $i++): ?>
                     <tr>
-                        <td><?= \htmlentities($directories[$i]) ?></td>
+                        <td><?= D::esc($directories[$i]) ?></td>
                     </tr>
                 <?php endfor ?>
             <?php endforeach ?>
@@ -228,8 +228,8 @@ class AutoloadCollector extends Collector
             <tbody>
             <?php foreach ($classes as $class => $file): ?>
                 <tr>
-                    <td><?= \htmlentities($class) ?></td>
-                    <td><?= \htmlentities($file) ?></td>
+                    <td><?= D::esc($class) ?></td>
+                    <td><?= D::esc($file) ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
@@ -246,10 +246,10 @@ class AutoloadCollector extends Collector
         }
         if ($conf && !empty($conf['directives']['opcache.preload'])) {
             $result = '<p><strong>File:</strong> '
-                . \htmlentities($conf['directives']['opcache.preload']) . '</p>';
+                . D::esc($conf['directives']['opcache.preload']) . '</p>';
             if (!empty($conf['directives']['opcache.preload_user'])) {
                 $result .= '<p><strong>User:</strong> '
-                    . \htmlentities($conf['directives']['opcache.preload_user']) . '</p>';
+                    . D::esc($conf['directives']['opcache.preload_user']) . '</p>';
             }
             $result .= $this->renderPreloadStatistics();
             return $result;
@@ -272,7 +272,7 @@ class AutoloadCollector extends Collector
         $result = '';
         $statistics = $this->getPreloadStatistics();
         if ($statistics) {
-            $memory = Debugger::convertSize($statistics['memory_consumption']);
+            $memory = D::convertSize($statistics['memory_consumption']);
             $classes = $statistics['classes'];
             $result .= '<p><strong>Memory:</strong> ' . $memory . '</p>';
             $result .= '<p><strong>Classes:</strong> ' . \count($classes) . '</p>';
