@@ -11,7 +11,6 @@ namespace Framework\Autoload;
 
 use Framework\Autoload\Debug\AutoloadCollector;
 use Framework\Debug\Collector;
-use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 /**
@@ -196,7 +195,6 @@ class Autoloader
      *
      * @return array<int,string> The namespace directory paths
      */
-    #[Pure]
     public function getNamespace(string $name) : array
     {
         return $this->namespaces[$this->renderRealName($name)] ?? [];
@@ -207,7 +205,6 @@ class Autoloader
      *
      * @return array<string,array<int,string>>
      */
-    #[Pure]
     public function getNamespaces() : array
     {
         return $this->namespaces;
@@ -278,7 +275,6 @@ class Autoloader
      *
      * @return string|null The file path or null if class is not mapped
      */
-    #[Pure]
     public function getClass(string $name) : ?string
     {
         return $this->classes[$this->renderRealName($name)] ?? null;
@@ -290,7 +286,6 @@ class Autoloader
      * @return array<string,string> An array of class names as keys and
      * file paths as values
      */
-    #[Pure]
     public function getClasses() : array
     {
         return $this->classes;
@@ -332,7 +327,6 @@ class Autoloader
      *
      * @return string|null The class file path or null if not found
      */
-    #[Pure]
     public function findClassPath(string $class) : ?string
     {
         $path = $this->getClass($class);
@@ -439,7 +433,6 @@ class Autoloader
      *
      * @return string
      */
-    #[Pure]
     protected function renderRealName(string $name) : string
     {
         return \trim($name, '\\');

@@ -9,8 +9,6 @@
  */
 namespace Framework\Autoload;
 
-use JetBrains\PhpStorm\Pure;
-
 /**
  * Class Locator.
  *
@@ -127,7 +125,6 @@ class Locator
         return \is_file($file) ? $file : null;
     }
 
-    #[Pure]
     protected function ensureExtension(string $filename, string $extension) : string
     {
         if (!\str_ends_with($filename, $extension)) {
@@ -144,7 +141,6 @@ class Locator
      *
      * @return array<int,string> An array of filenames found
      */
-    #[Pure]
     public function findFiles(string $filename, string $extension = '.php') : array
     {
         if ($extension) {
