@@ -11,6 +11,7 @@ namespace Tests\Autoload\Debug;
 
 use Framework\Autoload\Autoloader;
 use Framework\Autoload\Debug\AutoloadCollector;
+use Framework\Debug\Activity;
 use PHPUnit\Framework\TestCase;
 
 final class AutoloadCollectorTest extends TestCase
@@ -84,20 +85,14 @@ final class AutoloadCollectorTest extends TestCase
         self::assertStringContainsString('Foo\Bar\Baz\OneTrait', $contents);
         self::assertSame(
             'Load class OneClass',
-            $this->collector->getActivities()[0]['description']
+            $this->collector->getActivities()[0]->description
         );
         self::assertSame(
             'Load class Foo\Bar\Baz\OneTrait',
-            $this->collector->getActivities()[1]['description']
+            $this->collector->getActivities()[1]->description
         );
         foreach ($this->collector->getActivities() as $activity) {
-            self::assertSame([
-                'collector',
-                'class',
-                'description',
-                'start',
-                'end',
-            ], \array_keys($activity));
+            self::assertInstanceOf(Activity::class, $activity);
         }
     }
 

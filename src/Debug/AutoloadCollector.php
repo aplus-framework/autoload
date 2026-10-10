@@ -11,6 +11,7 @@ namespace Framework\Autoload\Debug;
 
 use Framework\Autoload\Autoloader;
 use Framework\Autoload\Preloader;
+use Framework\Debug\Activity;
 use Framework\Debug\Collector;
 use Framework\Debug\Debugger as D;
 use UnitEnum;
@@ -35,13 +36,13 @@ class AutoloadCollector extends Collector
         $activities = [];
         foreach ($this->getData() as $data) {
             if ($data['loaded']) {
-                $activities[] = [
-                    'collector' => $this->getName(),
-                    'class' => static::class,
-                    'description' => 'Load class ' . $data['class'],
-                    'start' => $data['start'],
-                    'end' => $data['end'],
-                ];
+                $activities[] = new Activity(
+                    collector: $this->getName(),
+                    class: static::class,
+                    description: 'Load class ' . $data['class'],
+                    start: $data['start'],
+                    end: $data['end'],
+                );
             }
         }
         return $activities;
