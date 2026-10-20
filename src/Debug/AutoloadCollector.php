@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Autoload\Debug;
+namespace Aplus\Autoload\Debug;
 
-use Framework\Autoload\Autoloader;
-use Framework\Autoload\Preloader;
-use Framework\Debug\Activity;
-use Framework\Debug\Collector;
-use Framework\Debug\Debugger as D;
+use Aplus\Autoload\Autoloader;
+use Aplus\Autoload\Preloader;
+use Aplus\Debug\Activity;
+use Aplus\Debug\Collector;
+use Aplus\Debug\Debugger as D;
 use UnitEnum;
 
 /**

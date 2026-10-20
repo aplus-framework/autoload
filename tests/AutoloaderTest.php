@@ -9,7 +9,7 @@
  */
 namespace Tests\Autoload;
 
-use Framework\Autoload\Autoloader;
+use Aplus\Autoload\Autoloader;
 use PHPUnit\Framework\TestCase;
 
 final class AutoloaderTest extends TestCase

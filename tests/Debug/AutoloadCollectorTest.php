@@ -9,9 +9,9 @@
  */
 namespace Tests\Autoload\Debug;
 
-use Framework\Autoload\Autoloader;
-use Framework\Autoload\Debug\AutoloadCollector;
-use Framework\Debug\Activity;
+use Aplus\Autoload\Autoloader;
+use Aplus\Autoload\Debug\AutoloadCollector;
+use Aplus\Debug\Activity;
 use PHPUnit\Framework\TestCase;
 
 final class AutoloadCollectorTest extends TestCase

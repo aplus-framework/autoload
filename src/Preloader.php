@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Autoload;
+namespace Aplus\Autoload;
 
 use InvalidArgumentException;
 
@@ -115,7 +115,7 @@ class Preloader
             }
             $className = $this->getLocator()->getClassName($file);
             if (!$className
-                || ($className !== 'Aplus' && !\str_starts_with($className, 'Framework\\'))
+                || ($className !== 'Aplus' && !\str_starts_with($className, 'Aplus\\'))
             ) {
                 continue;
             }
@@ -133,8 +133,8 @@ class Preloader
 
     protected function isDevelopmentClass(string $className) : bool
     {
-        return \str_starts_with($className, 'Framework\CodingStandard\\')
-            || \str_starts_with($className, 'Framework\Testing\\');
+        return \str_starts_with($className, 'Aplus\CodingStandard\\')
+            || \str_starts_with($className, 'Aplus\Testing\\');
     }
 
     /**
@@ -209,7 +209,7 @@ class Preloader
     }
 
     /**
-     * Get a list of Framework declarations.
+     * Get a list of Aplus declarations.
      *
      * @return array<int,string>
      */
@@ -217,7 +217,7 @@ class Preloader
     {
         $result = [];
         foreach (static::getAllDeclarations() as $declaration) {
-            if ($declaration === 'Aplus' || \str_starts_with($declaration, 'Framework\\')) {
+            if ($declaration === 'Aplus' || \str_starts_with($declaration, 'Aplus\\')) {
                 $result[] = $declaration;
             }
         }

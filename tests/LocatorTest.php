@@ -9,8 +9,8 @@
  */
 namespace Tests\Autoload;
 
-use Framework\Autoload\Autoloader;
-use Framework\Autoload\Locator;
+use Aplus\Autoload\Autoloader;
+use Aplus\Autoload\Locator;
 use PHPUnit\Framework\TestCase;
 
 final class LocatorTest extends TestCase

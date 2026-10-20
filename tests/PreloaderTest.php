@@ -9,8 +9,8 @@
  */
 namespace Tests\Autoload;
 
-use Framework\Autoload\Autoloader;
-use Framework\Autoload\Preloader;
+use Aplus\Autoload\Autoloader;
+use Aplus\Autoload\Preloader;
 use PHPUnit\Framework\TestCase;
 
 final class PreloaderTest extends TestCase
@@ -60,11 +60,11 @@ final class PreloaderTest extends TestCase
         );
         $classes = $preloader->getAutoloader()->getClasses();
         self::assertArrayHasKey(
-            \Framework\Debug\Debugger::class,
+            \Aplus\Debug\Debugger::class,
             $classes
         );
         self::assertArrayNotHasKey(
-            \Framework\CodingStandard\Config::class,
+            \Aplus\CodingStandard\Config::class,
             $classes
         );
         self::assertArrayHasKey(
@@ -84,11 +84,11 @@ final class PreloaderTest extends TestCase
             $classes
         );
         self::assertContains(
-            $classes[\Framework\Debug\Debugger::class],
+            $classes[\Aplus\Debug\Debugger::class],
             $packageFiles
         );
         self::assertContains(
-            $classes[\Framework\Debug\Debugger::class],
+            $classes[\Aplus\Debug\Debugger::class],
             $files
         );
     }
@@ -106,21 +106,21 @@ final class PreloaderTest extends TestCase
         self::assertNotEmpty($preloader->withPackages()->listFiles());
         $classes = $preloader->getAutoloader()->getClasses();
         self::assertContains(
-            $classes[\Framework\Debug\Debugger::class],
+            $classes[\Aplus\Debug\Debugger::class],
             $preloader->listFiles()
         );
         self::assertArrayNotHasKey(
-            \Framework\CodingStandard\Config::class,
+            \Aplus\CodingStandard\Config::class,
             $classes
         );
         $preloader->withDevPackages()->listFiles();
         $classes = $preloader->getAutoloader()->getClasses();
         self::assertArrayHasKey(
-            \Framework\CodingStandard\Config::class,
+            \Aplus\CodingStandard\Config::class,
             $classes
         );
         self::assertContains(
-            $classes[\Framework\CodingStandard\Config::class],
+            $classes[\Aplus\CodingStandard\Config::class],
             $preloader->withDevPackages()->listFiles()
         );
         $this->expectException(\InvalidArgumentException::class);
