@@ -34,7 +34,7 @@ For this, the Autoloader class is instantiated as shown in the following example
 
 .. code-block:: php
 
-    use Framework\Autoload\Autoloader;
+    use Aplus\Autoload\Autoloader;
 
     $autoloader = new Autoloader();
 
@@ -238,8 +238,8 @@ To instantiate it you need an instance of Autoloader. Let's see:
 
 .. code-block:: php
 
-    use Framework\Autoload\Autoloader;
-    use Framework\Autoload\Locator;
+    use Aplus\Autoload\Autoloader;
+    use Aplus\Autoload\Locator;
 
     $autoloader = new Autoloader();
     $locator = new Locator($autoloader);
@@ -345,7 +345,7 @@ To load the Aplus Framework class files, create a file like **preload.php**:
 
     require __DIR__ . '/vendor/aplus/autoload/src/Preloader.php';
 
-    use Framework\Autoload\Preloader;
+    use Aplus\Autoload\Preloader;
 
     $preloader = new Preloader();
     $preloader->load(); // array of strings
@@ -370,8 +370,8 @@ That way you can add classes that don't belong to the Framework.
 
 .. code-block:: php
 
-    use Framework\Autoload\Autoloader;
-    use Framework\Autoload\Preloader;
+    use Aplus\Autoload\Autoloader;
+    use Aplus\Autoload\Preloader;
 
     $autoloader = new Autoloader();
     $autoloader->addNamespace('Foo', __DIR__ . '/foo'); // static
